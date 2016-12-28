@@ -12,7 +12,7 @@
 # =============================================================================
 
 # -----------------------------------------------------------------------------
-# -1. Preliminaries
+# 0. Preliminaries
 # -----------------------------------------------------------------------------
 
 # Clear environment
@@ -51,5 +51,35 @@ packageList <- c("ggplot2", "zoo", "mFilter", "stats", "tseries",
 invisible(GetPackages(packageList))
 
 
+
+# -----------------------------------------------------------------------------
+# 0. load data
+# -----------------------------------------------------------------------------
+
+# load data set containing siwss data
+swiss <- read.csv("DataSwiss.csv")
+# data variables:
+#   X = Dates, quarters
+#   CPI = consumer price index
+#   i10Y = long-run interest rates (10 years)
+#   GDP = gross domestic product
+#   GDP_DEF = GDP deflator
+#   COM = commodity prices
+#   i3M = short-run interest rates (3 Month Libor)
+#   M1 = money aggregate 1
+#   M2 = money aggregate 2
+#   M3 = money aggregate 3
+#   MB = money base
+#   RER = real exchange rate
+
+
+# check if there are NA and remove them entirely from data set
+swiss <- na.omit(swiss)
+
+
+# make X as date format and use it as rownames
+swiss$X <- as.Date(as.yearqtr(as.character(swiss$X),
+                              format = "%Y-Q%q"))
+rownames(swiss) <- swiss$X
 
  
