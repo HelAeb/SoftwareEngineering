@@ -44,7 +44,7 @@ setwd(dir)
 source("./functions.R")
 
 # Used packages in this analaysis
-packageList <- c("ggplot2", "zoo", "mFilter", "stats", "tseries",
+packageList <- c("ggplot2", "plyr", "zoo", "mFilter", "stats", "tseries",
                  "xtable", "reshape2", "vars", "gridExtra")
 
 # Install and/or load all needed packages
@@ -73,13 +73,61 @@ swiss <- read.csv("DataSwiss.csv")
 #   RER = real exchange rate
 
 
+
+# -----------------------------------------------------------------------------
+# 1. clean data 
+# -----------------------------------------------------------------------------
+
 # check if there are NA and remove them entirely from data set
 swiss <- na.omit(swiss)
 
 
-# make X as date format and use it as rownames
+# make X as date format, use it as rownames and change the column-name "X" to "Date"
 swiss$X <- as.Date(as.yearqtr(as.character(swiss$X),
                               format = "%Y-Q%q"))
 rownames(swiss) <- swiss$X
+names(swiss)[names(swiss) == 'X'] <- 'Date'
 
- 
+
+# -----------------------------------------------------------------------------
+# 2. first look at data 
+# -----------------------------------------------------------------------------
+# create long format for ggplot
+swiss_long <- melt(swiss, id.vars = "Date")
+
+# use the created function "white.theme.date.plot" to create ggplot with data on white background theme.
+#   x-axis = Date, y-axis = value, line type = variables used
+
+#   GDP
+white.theme.date.plot(subset(swiss_long, (variable == "GDP")))
+
+#   GDP_DEF
+white.theme.date.plot(subset(swiss_long, (variable == "GDP_DEF")))
+
+# money aggregates
+white.theme.date.plot(subset(swiss_long, 
+                             (variable == "MB") | 
+                               (variable == "M1") | 
+                               (variable == "M2") | 
+                               (variable == "M3")))
+#   CPI
+white.theme.date.plot(subset(swiss_long, (variable == "CPI")))
+
+#   interest rates (short and long run)
+white.theme.date.plot(subset(swiss_long, (variable == "i10Y") | (variable == "i3M")))
+
+
+# -----------------------------------------------------------------------------
+# 3. stationarity
+# -----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+

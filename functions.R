@@ -21,7 +21,7 @@ GetPackages <- function(requiredPackages) {
   # Checks if the given packages are installed and loads the missing ones
   #
   # Args: 
-  #   requiredPackages: A vector of packages that should be loaded
+  #   requiredPackages = A vector of packages that should be loaded
   # Returns:
   #   Loads packages
   newPackages <- requiredPackages[!(requiredPackages %in% 
@@ -31,4 +31,35 @@ GetPackages <- function(requiredPackages) {
     install.packages(newPackages)
   }
   sapply(requiredPackages, require, character.only=TRUE)
+}
+
+
+# -----------------------------------------------------------------------------
+# 2. first look at data 
+# -----------------------------------------------------------------------------
+
+# Function returning a ggplot on white background, where on the x-axis are the Dates
+#   and on the y-axis are the values. Line types are according to the variables
+white.theme.date.plot <- function(data){
+  # returns a ggplot with white background theme
+  #
+  # Args: 
+  #   data = data set in long format, containing the columns "Date", "value" and "variable"
+  # Returns:
+  #   ggplot on white background, Date on x-axis and values of the variable on y-axis. 
+  #   the line type is according to the variables
+  plot <- ggplot(data = data,
+                 aes(x = Date, y = value, linetype = variable)) +
+    geom_line() +
+    scale_linetype("") +
+    theme_bw() + 
+    theme(plot.background = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          legend.key = element_blank(),
+          axis.title.y = element_blank()) +
+    theme(panel.border= element_blank()) +
+    theme(axis.line.x = element_line(color="black"),
+          axis.line.y = element_line(color="black"))
+  return(plot)
 }
