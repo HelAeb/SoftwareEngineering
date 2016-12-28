@@ -15,31 +15,6 @@
 # 0. Preliminaries
 # -----------------------------------------------------------------------------
 
-# Clear environment
-rm(list=ls())
-
-# Set working directory
-    ## Erklärung:
-    ## Sys.info()[['login']] unten in die Konsole eingeben und den Output dieses Befehls
-    ## in das unten vorbereitete Feld (zb: 'Feld_Divna') eingeben. (Vergesst die ' ' nicht, vgl. 'Helena Aebersold')
-    ## Danach gebt ihr eure Ordnerstruktur / working directory in das vorbereitete Feld ein.
-    ## Wenn das gemacht ist, können wir allen in diesem File arbeiten, ohne dass wir jedes mal 
-    ## die Ordnerstruktur anpassen müssen.
-if (Sys.info()[['login']] == 'Helena Aebersold') {
-  dir <- 'C:/Users/Helena Aebersold/Dropbox/HSG/Master/HS16/software_engineering_for_economists/SoftwareEngineering/'
-} else if (Sys.info()[['login']] == 'Feld_Divna') {
-  dir <- ""
-} else if (Sys.info()[['login']] == 'Feld_Michele') {
-  dir <- ""
-} else if (Sys.info()[['login']] == 'Feld_PhilippZahn') {
-  dir <- ""
-} else {
-  dir <- getwd()
-}
-setwd(dir)
-
-
-
 # Source function file (from wd)
 source("./functions.R")
 
@@ -57,9 +32,10 @@ invisible(GetPackages(packageList))
 # -----------------------------------------------------------------------------
 
 # load data set containing siwss data
-swiss <- read.csv("DataSwiss.csv")
+swiss <- read.csv(data)
+names(swiss)[names(swiss) == 'X'] <- 'Date'
 # data variables:
-#   X = Dates, quarters
+#   Date = Dates, quarters
 #   CPI = consumer price index
 #   i10Y = long-run interest rates (10 years)
 #   GDP = gross domestic product
@@ -73,9 +49,8 @@ swiss <- read.csv("DataSwiss.csv")
 #   RER = real exchange rate
 
 
-
 # -----------------------------------------------------------------------------
-# 1. clean data 
+# 1. clean data I: remove all NA, make Date
 # -----------------------------------------------------------------------------
 
 # check if there are NA and remove them entirely from data set
@@ -83,10 +58,9 @@ swiss <- na.omit(swiss)
 
 
 # make X as date format, use it as rownames and change the column-name "X" to "Date"
-swiss$X <- as.Date(as.yearqtr(as.character(swiss$X),
+swiss$Date <- as.Date(as.yearqtr(as.character(swiss$Date),
                               format = "%Y-Q%q"))
-rownames(swiss) <- swiss$X
-names(swiss)[names(swiss) == 'X'] <- 'Date'
+rownames(swiss) <- swiss$Date
 
 
 # -----------------------------------------------------------------------------
@@ -118,9 +92,25 @@ white.theme.date.plot(subset(swiss_long, (variable == "i10Y") | (variable == "i3
 
 
 # -----------------------------------------------------------------------------
-# 3. stationarity
+# 3. clean data II: stationarity
 # -----------------------------------------------------------------------------
 
+# list with log of data
+#   create a data frame combining the ones without log and those with
+swiss_log <- cbind(swiss[ , which(names(swiss) %in% no_log)],
+                  log(swiss[ , -which(names(swiss) %in% no_log)])) # get log of all variables except for those defined as no_log
+swiss_log <- swiss_log[, -which(names(swiss_log) == "Date")] # remove Dates (don't want to HP filter them)
+#   make list of it to be able to apply HP filter on each variable itself
+swiss_log2 <- as.list(swiss_log)
+
+
+# use HP-filter to make data stationary, apply on each variable and save as list
+hp_data <- lapply(swiss_log, hpfilter, freq = lambda)
+
+# combine cycle data of HP filter into data frame
+swiss_detrended <- as.data.frame(sapply(hp_data, `[`, "cycle"))
+# add Date to data frame again for easier plots
+swiss_detrended <- cbind(Date = swiss$Date, swiss_detrended)
 
 
 
