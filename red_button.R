@@ -56,6 +56,11 @@ no_log <- c("Date", "i10Y", "i3M", "RER")
 lambda <- 1600 # usually lambda = 1600 for quarterly data
 
 
+# separate PDF files for graphs of raw data and detrended ones
+#   T: separate PDF files
+#   F: all plots saved in one PDF file
+separate_pdf <- T
+
 
 # -----------------------------------------------------------------------------
 # run working code

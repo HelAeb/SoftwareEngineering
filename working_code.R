@@ -15,7 +15,10 @@
 # start PDF for plots
 # -----------------------------------------------------------------------------
 # save all plots in one pdf
-pdf("plots.pdf")
+if (separate_pdf == F){
+  pdf("Plots.pdf")
+}
+
 
 
 # -----------------------------------------------------------------------------
@@ -78,31 +81,27 @@ rownames(swiss) <- swiss$Date
 # create long format for ggplot
 swiss_long <- melt(swiss, id.vars = "Date")
 
+
 # use the created function "white.theme.date.plot" to create ggplot with data on white background theme.
 #   x-axis = Date, y-axis = value, line type = variables used
 
-#   GDP
-white.theme.date.plot(subset(swiss_long, (variable == "GDP")), 
-                      "GDP raw data")
+# plot for each variable in the data set
+all_variables_raw <- as.character(unique(swiss_long$variable))
+if (separate_pdf == T){ # if want to have separate PDF files, create "RawData.pdf" with these plots
+  pdf("RawData.pdf")
+  for (i in 1:length(all_variables_raw)){
+    plot <- white.theme.date.plot(subset(swiss_long, variable == all_variables_raw[i]), title = "raw data")
+    print(plot)
+  }
+  dev.off()
+} else { # else print plots; they are added to the overall plot-PDF
+  for (i in 1:length(all_variables_raw)){
+    plot <- white.theme.date.plot(subset(swiss_long, variable == all_variables_raw[i]), title = "raw data")
+    print(plot)
+  }
+}
 
-#   GDP_DEF
-white.theme.date.plot(subset(swiss_long, (variable == "GDP_DEF")),
-                      "GDP_DEF raw data")
 
-# money aggregates
-white.theme.date.plot(subset(swiss_long, 
-                             (variable == "MB") | 
-                               (variable == "M1") | 
-                               (variable == "M2") | 
-                               (variable == "M3")), 
-                      "money aggregates raw data")
-#   CPI
-white.theme.date.plot(subset(swiss_long, (variable == "CPI")), 
-                      "CPI raw data")
-
-#   interest rates (short and long run)
-white.theme.date.plot(subset(swiss_long, (variable == "i10Y") | (variable == "i3M")), 
-                      "interest rates raw data")
 
 
 # -----------------------------------------------------------------------------
@@ -131,25 +130,23 @@ swiss_detrended_long <- melt(swiss_detrended, id.vars = "Date")
 #------------------
 # having a look at the detrended data
 #------------------
-# GDP
-white.theme.date.plot(subset(swiss_detrended_long, (variable == "GDP.cycle")), 
-                      "GDP detrended")
-# GDP_DEF
-white.theme.date.plot(subset(swiss_detrended_long, (variable == "GDP_DEF.cycle")), 
-                      "GDP_DEF detrended")
-# money aggregates
-white.theme.date.plot(subset(swiss_detrended_long, 
-                             (variable == "MB.cycle") | 
-                               (variable == "M1.cycle") | 
-                               (variable == "M2.cycle") | 
-                               (variable == "M3.cycle")),
-                      "money aggregates detrended")
-# CPI
-white.theme.date.plot(subset(swiss_detrended_long, (variable == "CPI.cycle")), 
-                      "CPI detrended")
-# interest rates
-white.theme.date.plot(subset(swiss_detrended_long, (variable == "i10Y.cycle") | (variable == "i3M.cycle")), 
-                      "interest rates detrended")
+
+# plot for each variable in the data set
+all_variables_cycle <- as.character(unique(swiss_detrended_long$variable))
+if (separate_pdf == T){ # if want to have separate PDF files, create "RawData.pdf" with these plots
+  pdf("CycleData.pdf")
+  for (i in 1:length(all_variables_cycle)){
+    plot <- white.theme.date.plot(subset(swiss_detrended_long, variable == all_variables_cycle[i]), title = "cycle data")
+    print(plot)
+  }
+  dev.off()
+} else { # else print plots; they are added to the overall plot-PDF
+  for (i in 1:length(all_variables_cycle)){
+    plot <- white.theme.date.plot(subset(swiss_detrended_long, variable == all_variables_cycle[i]), title = "cycle data")
+    print(plot)
+  }
+}
+
 
 
 
