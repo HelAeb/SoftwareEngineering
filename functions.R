@@ -8,13 +8,13 @@
 
 # =============================================================================
 # FUNCTIONS FILE
-# - This File contains all functions and is sourced by the script file
+# - This File contains all functions and is sourced by the script file (working code)
 # =============================================================================
+
 
 # -----------------------------------------------------------------------------
 # 0. Preliminaries
 # -----------------------------------------------------------------------------
-
 
 # Function to check for packages and load missing ones
 GetPackages <- function(requiredPackages) {
@@ -34,13 +34,14 @@ GetPackages <- function(requiredPackages) {
 }
 
 
+
 # -----------------------------------------------------------------------------
 # 2. first look at data 
 # -----------------------------------------------------------------------------
 
 # Function returning a ggplot on white background, where on the x-axis are the Dates
 #   and on the y-axis are the values. Line types are according to the variables
-white.theme.date.plot <- function(data){
+white.theme.date.plot <- function(data, title){
   # returns a ggplot with white background theme
   #
   # Args: 
@@ -60,7 +61,8 @@ white.theme.date.plot <- function(data){
           axis.title.y = element_blank()) +
     theme(panel.border= element_blank()) +
     theme(axis.line.x = element_line(color="black"),
-          axis.line.y = element_line(color="black"))
+          axis.line.y = element_line(color="black")) +
+    labs(title = title)
   return(plot)
 }
 

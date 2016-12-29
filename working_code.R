@@ -8,8 +8,15 @@
 
 # =============================================================================
 # SCRIPT FILE
-# - This File contains the working code
+# - This File contains the working code and is sourced by the red button file
 # =============================================================================
+
+# -----------------------------------------------------------------------------
+# start PDF for plots
+# -----------------------------------------------------------------------------
+# save all plots in one pdf
+pdf("plots.pdf")
+
 
 # -----------------------------------------------------------------------------
 # 0. Preliminaries
@@ -33,9 +40,11 @@ invisible(GetPackages(packageList))
 
 # load data set containing siwss data
 swiss <- read.csv(data)
-names(swiss)[names(swiss) == 'X'] <- 'Date'
+names(swiss)[names(swiss) == 'X'] <- 'Date' # rename column "X" as "Date"
+#----------
 # data variables:
-#   Date = Dates, quarters
+#----------
+#   Date = Dates (in quarters)
 #   CPI = consumer price index
 #   i10Y = long-run interest rates (10 years)
 #   GDP = gross domestic product
@@ -50,14 +59,14 @@ names(swiss)[names(swiss) == 'X'] <- 'Date'
 
 
 # -----------------------------------------------------------------------------
-# 1. clean data I: remove all NA, make Date
+# 1. clean data I: remove all NA, Date format for dates
 # -----------------------------------------------------------------------------
 
 # check if there are NA and remove them entirely from data set
 swiss <- na.omit(swiss)
 
 
-# make X as date format, use it as rownames and change the column-name "X" to "Date"
+# make X as date format, use it as rownames
 swiss$Date <- as.Date(as.yearqtr(as.character(swiss$Date),
                               format = "%Y-Q%q"))
 rownames(swiss) <- swiss$Date
@@ -73,22 +82,27 @@ swiss_long <- melt(swiss, id.vars = "Date")
 #   x-axis = Date, y-axis = value, line type = variables used
 
 #   GDP
-white.theme.date.plot(subset(swiss_long, (variable == "GDP")))
+white.theme.date.plot(subset(swiss_long, (variable == "GDP")), 
+                      "GDP raw data")
 
 #   GDP_DEF
-white.theme.date.plot(subset(swiss_long, (variable == "GDP_DEF")))
+white.theme.date.plot(subset(swiss_long, (variable == "GDP_DEF")),
+                      "GDP_DEF raw data")
 
 # money aggregates
 white.theme.date.plot(subset(swiss_long, 
                              (variable == "MB") | 
                                (variable == "M1") | 
                                (variable == "M2") | 
-                               (variable == "M3")))
+                               (variable == "M3")), 
+                      "money aggregates raw data")
 #   CPI
-white.theme.date.plot(subset(swiss_long, (variable == "CPI")))
+white.theme.date.plot(subset(swiss_long, (variable == "CPI")), 
+                      "CPI raw data")
 
 #   interest rates (short and long run)
-white.theme.date.plot(subset(swiss_long, (variable == "i10Y") | (variable == "i3M")))
+white.theme.date.plot(subset(swiss_long, (variable == "i10Y") | (variable == "i3M")), 
+                      "interest rates raw data")
 
 
 # -----------------------------------------------------------------------------
@@ -109,8 +123,42 @@ hp_data <- lapply(swiss_log, hpfilter, freq = lambda)
 
 # combine cycle data of HP filter into data frame
 swiss_detrended <- as.data.frame(sapply(hp_data, `[`, "cycle"))
-# add Date to data frame again for easier plots
+
+# add Date to data frame again for easier plots (also create it as long format for ggplot)
 swiss_detrended <- cbind(Date = swiss$Date, swiss_detrended)
+swiss_detrended_long <- melt(swiss_detrended, id.vars = "Date")
+
+#------------------
+# having a look at the detrended data
+#------------------
+# GDP
+white.theme.date.plot(subset(swiss_detrended_long, (variable == "GDP.cycle")), 
+                      "GDP detrended")
+# GDP_DEF
+white.theme.date.plot(subset(swiss_detrended_long, (variable == "GDP_DEF.cycle")), 
+                      "GDP_DEF detrended")
+# money aggregates
+white.theme.date.plot(subset(swiss_detrended_long, 
+                             (variable == "MB.cycle") | 
+                               (variable == "M1.cycle") | 
+                               (variable == "M2.cycle") | 
+                               (variable == "M3.cycle")),
+                      "money aggregates detrended")
+# CPI
+white.theme.date.plot(subset(swiss_detrended_long, (variable == "CPI.cycle")), 
+                      "CPI detrended")
+# interest rates
+white.theme.date.plot(subset(swiss_detrended_long, (variable == "i10Y.cycle") | (variable == "i3M.cycle")), 
+                      "interest rates detrended")
+
+
+
+
+
+
+# -----------------------------------------------------------------------------
+# 4. correlogramm
+# -----------------------------------------------------------------------------
 
 
 
@@ -121,3 +169,22 @@ swiss_detrended <- cbind(Date = swiss$Date, swiss_detrended)
 
 
 
+
+# -----------------------------------------------------------------------------
+# 5. sVAR
+# -----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+# -----------------------------------------------------------------------------
+# end PDF for plots
+# -----------------------------------------------------------------------------
+# stop putting plots into the pdf file
+dev.off()

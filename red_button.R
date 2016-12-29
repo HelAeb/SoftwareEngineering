@@ -8,6 +8,7 @@
 
 # =============================================================================
 # - This File contains the "red button" and possible changes with new data
+#     it sources the working code
 # =============================================================================
 
 
@@ -40,11 +41,12 @@ setwd(dir)
 
 
 # -----------------------------------------------------------------------------
-# 1. possible changes with new data
-#   pre requisites for working code
+# 1. possible changes with new data set
+#   prerequisites for working code
 # -----------------------------------------------------------------------------
 
 # name of data set
+#   Variable "X" is the Date
 data <- "./DataSwiss.csv"
 
 # variables in data which do NOT need to be logarithmized
