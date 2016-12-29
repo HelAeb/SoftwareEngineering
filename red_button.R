@@ -45,21 +45,68 @@ setwd(dir)
 #   prerequisites for working code
 # -----------------------------------------------------------------------------
 
-# name of data set
-#   Variable "X" is the Date
-data <- "./DataSwiss.csv"
-
-# variables in data which do NOT need to be logarithmized
-no_log <- c("Date", "i10Y", "i3M", "RER")
-
-# define lambda for HP-filter
-lambda <- 1600 # usually lambda = 1600 for quarterly data
-
+#--------------------
+# saving plots in PDF
+#--------------------
 
 # separate PDF files for graphs of raw data and detrended ones
 #   T: separate PDF files
 #   F: all plots saved in one PDF file
 separate_pdf <- T
+
+
+#--------------------
+# data set
+#--------------------
+
+# name of data set
+data_file <- "./DataSwiss.csv"
+date <- "X" # variable indicating the dates --> to make sure it is called "Date" in analysis
+
+#---
+# data variables:
+#---
+#   X = Dates (in quarters)
+#   CPI = consumer price index
+#   i10Y = long-run interest rates (10 years)
+#   GDP = gross domestic product
+#   GDP_DEF = GDP deflator
+#   COM = commodity prices
+#   i3M = short-run interest rates (3 Month Libor)
+#   M1 = money aggregate 1
+#   M2 = money aggregate 2
+#   M3 = money aggregate 3
+#   MB = money base
+#   RER = real exchange rate
+
+
+
+#--------------------
+# log of data
+#--------------------
+
+# variables in data which do NOT need to be logarithmized
+no_log <- c("Date", "i10Y", "i3M", "RER")
+
+
+
+#--------------------
+# HP filter
+#--------------------
+
+# define lambda for HP-filter
+lambda <- 1600 # usually lambda = 1600 for quarterly data
+
+
+
+#--------------------
+# sVAR variables
+#--------------------
+# variables entering the sVAR model
+#   IMPORTANT: make sure to have the ordering of the variables correct!!!
+svar_variables <- c("GDP", "INF", "M1", "i3M")
+
+
 
 
 # -----------------------------------------------------------------------------
