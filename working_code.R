@@ -178,12 +178,14 @@ if (interest_corr == T) {
 }
 if (priceexrate_corr == T) {
   ccf.data.priceexrate <- melt(ccf.data[, c("lag", "CPI", "COM", "RER")], id = "lag")
-  interest_corr.plot <- corr.plot(ccf.data.interest$lag, ccf.data.interest$value, ccf.data.interest)
+  priceexrate_corr.plot <- corr.plot(ccf.data.priceexrate$lag, ccf.data.priceexrate$value, ccf.data.priceexrate)
 }
 if (choice_corr == T) {
   ccf.data.choice <- melt(ccf.data[, c(corr_variables)], id = "lag")
   choice_corr.plot <- corr.plot(ccf.data.choice$lag, ccf.data.choice$value, ccf.data.choice)
 }
+
+# get PDF of plotted data
 
 
 
@@ -211,7 +213,7 @@ var_optimal_lag <- VARselect(data_svar, lag.max = max_lag, type = "both")
 
 #-------------------------------------------------
 # estimate with optimal lag, taking the BIC (== Schwarz Criterion SC)
-var_estimate <- VAR(var_data_model[-1, ], # -1 because we have a NA in inflation due to first diff. and this has to be ignored
+var_estimate <- VAR(var_data_amodel[-1, ], # -1 because we have a NA in inflation due to first diff. and this has to be ignored
                     p = 2, # see explanation above about var_optimal_lag
                     type = "both")
 summary(var_estimate)
