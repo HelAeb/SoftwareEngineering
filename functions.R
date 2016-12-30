@@ -85,7 +85,7 @@ growth <- function(data){
   first_diff <- diff(data)  / # take first difference
     data[-length(data)] * 100 # calculate growth rate
   first_diff # return results
-
+}
 
 
 

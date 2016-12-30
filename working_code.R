@@ -173,9 +173,39 @@ ccf.data <- as.data.frame(cbind(lag = ccf.data.frame(data_detrended$GDP.cycle, d
 # -----------------------------------------------------------------------------
 # 5. sVAR
 # -----------------------------------------------------------------------------
+# need detrended variable names to get in detrended-matrix
+#   change names of variables to be same as in that matrix
+svar_variables_detrended <- paste(svar_variables, ".cycle", sep = "")
+
+# separate data frame with svar data
+data_svar <- data_detrended[, which(names(data_detrended) %in% svar_variables_detrended)]
+data_svar <- data_svar[, svar_variables_detrended]
+
+
+# choose optimal lag
+var_optimal_lag <- VARselect(data_svar, lag.max = max_lag, type = "both")
 
 
 
+
+
+
+
+#-------------------------------------------------
+# estimate with optimal lag, taking the BIC (== Schwarz Criterion SC)
+var_estimate <- VAR(var_data_amodel[-1, ], # -1 because we have a NA in inflation due to first diff. and this has to be ignored
+                    p = 2, # see explanation above about var_optimal_lag
+                    type = "both")
+summary(var_estimate)
+
+
+# create A-matrix with NA for those values which have to be estimated
+a_matrix <- matrix(c(1, NA, NA, NA,
+                     0, 1, NA, NA,
+                     0, 0, 1, NA,
+                     0, 0, 0, 1),
+                   4, 4)
+svar_estimate <- SVAR(var_estimate, Amat = a_matrix)
 
 
 

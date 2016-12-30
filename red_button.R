@@ -121,6 +121,8 @@ lags <- 8
 #   IMPORTANT: make sure to have the ordering of the variables correct!!!
 svar_variables <- c("GDP", "INF", "M1", "i3M")
 
+# choose maximal lag for optimal lag in sVAR
+max_lag <- 8
 
 
 
