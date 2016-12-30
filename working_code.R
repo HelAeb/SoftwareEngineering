@@ -135,19 +135,21 @@ if (separate_pdf == T){ # if want to have separate PDF files, create "RawData.pd
 
 
 
-
-
-
 # -----------------------------------------------------------------------------
 # 4. correlogramm
 # -----------------------------------------------------------------------------
 
-
-
-
-
-
-
+# computing correlogramm against GDP for each variable and putting all in data frame
+ccf.data <- as.data.frame(cbind(lag = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$CPI.cycle, lags)$lag,
+                                CPI = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$CPI.cycle, lags)$correlation,
+                                i3M = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$i3M.cycle, lags)$correlation,
+                                i10Y = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$i10Y.cycle, lags)$correlation,
+                                COM = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$COM.cycle, lags)$correlation,
+                                MB = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$MB.cycle, lags)$correlation,
+                                M1 = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$M1.cycle, lags)$correlation,
+                                M2 = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$M2.cycle, lags)$correlation,
+                                M3 = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$M3.cycle, lags)$correlation,
+                                RER = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$RER.cycle, lags)$correlation))
 
 
 
