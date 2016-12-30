@@ -28,8 +28,8 @@ rm(list=ls())
 ## die Ordnerstruktur anpassen müssen.
 if (Sys.info()[['login']] == 'Helena Aebersold') {
   dir <- 'C:/Users/Helena Aebersold/Dropbox/HSG/Master/HS16/software_engineering_for_economists/SoftwareEngineering/'
-} else if (Sys.info()[['login']] == 'Feld_Divna') {
-  dir <- ""
+} else if (Sys.info()[['login']] == 'Divna') {
+  dir <- "C:\Users\Divna\Desktop\SoftwareEngineering"
 } else if (Sys.info()[['login']] == 'Feld_Michele') {
   dir <- ""
 } else if (Sys.info()[['login']] == 'Feld_PhilippZahn') {
@@ -96,6 +96,15 @@ no_log <- c("Date", "i10Y", "i3M", "RER")
 
 # define lambda for HP-filter
 lambda <- 1600 # usually lambda = 1600 for quarterly data
+
+
+
+#--------------------
+# Correlations variables
+#--------------------
+
+# define number of lags and leads for correlogram
+lags <- 8
 
 
 
