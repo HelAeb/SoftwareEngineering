@@ -167,6 +167,25 @@ ccf.data <- as.data.frame(cbind(lag = ccf.data.frame(data_detrended$GDP.cycle, d
                                 M3 = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$M3.cycle, lags)$correlation,
                                 RER = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$RER.cycle, lags)$correlation))
 
+# get specified data in red_button together in long format and plot with ggplot
+  if (money_corr == T) {
+  ccf.data.money <- melt(ccf.data[, c("lag", "MB", "M1", "M2", "M3")], id = "lag")
+  money_corr.plot <- corr.plot(ccf.data.money$lag, ccf.data.money$value, ccf.data.money)
+}
+if (interest_corr == T) {
+  ccf.data.interest <- melt(ccf.data[, c("lag", "i3M", "i10Y")], id = "lag")
+  interest_corr.plot <- corr.plot(ccf.data.interest$lag, ccf.data.interest$value, ccf.data.interest)
+}
+if (priceexrate_corr == T) {
+  ccf.data.priceexrate <- melt(ccf.data[, c("lag", "CPI", "COM", "RER")], id = "lag")
+  interest_corr.plot <- corr.plot(ccf.data.interest$lag, ccf.data.interest$value, ccf.data.interest)
+}
+if (choice_corr == T) {
+  ccf.data.choice <- melt(ccf.data[, c(corr_variables)], id = "lag")
+  choice_corr.plot <- corr.plot(ccf.data.choice$lag, ccf.data.choice$value, ccf.data.choice)
+}
+
+
 
 
 
