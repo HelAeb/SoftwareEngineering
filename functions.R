@@ -67,3 +67,22 @@ white.theme.date.plot <- function(data, title){
 }
 
 
+
+# -----------------------------------------------------------------------------
+# 4. correlogramm
+# -----------------------------------------------------------------------------
+
+# function computing dynamic correlogram and putting it together into a data frame
+ccf.data.frame <- function(x, y, lags) {
+  # makes a data frame out of ccf (cross-correlation function) for ggplot
+  #
+  # Args:
+  #   x, y: time series data
+  #   lags: number of lags and leads (specified in red_button)
+  # 
+  # Returns:
+  #   a data frame containing the lags and cross-correlations
+  ccf.data <- ccf(x, y, lag.max = lags, type = "correlation", plot = F)
+  ccf.df <- data.frame(lag = ccf.data$lag,
+                       correlation = ccf.data$acf)
+}
