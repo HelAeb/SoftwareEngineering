@@ -109,7 +109,29 @@ ccf.data.frame <- function(x, y, lags) {
                        correlation = ccf.data$acf)
 }
 
-
+# function for plotting chosen data with ggplot for correlogram
+corr.plot <- function(x, y, choice.variables) {
+  # makes ggplot with dynamic correlation and with white background theme
+  #
+  # Args: 
+  #   x, y: time series data
+  #   choice.variables: data frame with chosen variables according options in red_button
+  #
+  # Returns:
+  #   ggplot with lags and leads on x-axis and correlation on y-axis
+  ggplot(choice.variables, aes(x = x, y = y, linetype = variable)) +
+         geom_line() +
+         scale_linetype("") +
+         labs(x = "Lags", y = "Cross-correlation") +
+         theme_bw() + 
+         theme(plot.background = element_blank(),
+               panel.grid.major = element_blank(),
+               panel.grid.minor = element_blank(),
+               legend.key = element_blank()) +
+         theme(panel.border= element_blank()) +
+         theme(axis.line.x = element_line(color="black"),
+               axis.line.y = element_line(color="black"))
+}
 
 
 
