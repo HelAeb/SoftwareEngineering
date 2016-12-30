@@ -29,7 +29,7 @@ rm(list=ls())
 if (Sys.info()[['login']] == 'Helena Aebersold') {
   dir <- 'C:/Users/Helena Aebersold/Dropbox/HSG/Master/HS16/software_engineering_for_economists/SoftwareEngineering/'
 } else if (Sys.info()[['login']] == 'Divna') {
-  dir <- "C:\Users\Divna\Desktop\SoftwareEngineering"
+  dir <- "C:/Users/Divna/Documents/Uni/Master/3. Semester/Kontextstudium/Software Engineering for Economists/Group Project/SoftwareEngineering/"
 } else if (Sys.info()[['login']] == 'Feld_Michele') {
   dir <- ""
 } else if (Sys.info()[['login']] == 'Feld_PhilippZahn') {
