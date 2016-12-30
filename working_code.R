@@ -185,36 +185,6 @@ if (choice_corr == T) {
   choice_corr.plot <- corr.plot(ccf.data.choice$lag, ccf.data.choice$value, ccf.data.choice)
 }
 
-# get PDF of plotted data
-if (separate_pdf == T) { # if want to have separate PDF files, create "Cross-correlations.pdf" with all chosen options
-  pdf("Cross-correlation.pdf")
-  if (money_corr == T) {
-    print(money_corr.plot)
-  }
-  if (interest_corr == T) {
-    print(interest_corr.plot)
-  }
-  if (priceexrate_corr == T) {
-    print(priceexrate_corr.plot)
-  }
-  if (choice_corr == T) {
-    print(choice_corr.plot)
-  }
-} else { # else print plots if chosen in red_button; they are added to the overall plot-PDF
-  if (money_corr == T) {
-    print(money_corr.plot)
-  }
-  if (interest_corr == T) {
-    print(interest_corr.plot)
-  }
-  if (priceexrate_corr == T) {
-    print(priceexrate_corr.plot)
-  }
-  if (choice_corr == T) {
-    print(choice_corr.plot)
-  }
-}
-
 
 
 
