@@ -185,6 +185,35 @@ if (choice_corr == T) {
   choice_corr.plot <- corr.plot(ccf.data.choice$lag, ccf.data.choice$value, ccf.data.choice)
 }
 
+# get PDF of plotted data
+if (separate_pdf == T) { # if want to have separate PDF files, create "Cross-correlations.pdf" with all chosen options
+  pdf("Cross-correlation.pdf")
+  if (money_corr == T) {
+    print(money_corr.plot)
+  }
+  if (interest_corr == T) {
+    print(interest_corr.plot)
+  }
+  if (priceexrate_corr == T) {
+    print(priceexrate_corr.plot)
+  }
+  if (choice_corr == T) {
+    print(choice_corr.plot)
+  }
+} else { # else print plots if chosen in red_button; they are added to the overall plot-PDF
+  if (money_corr == T) {
+    print(money_corr.plot)
+  }
+  if (interest_corr == T) {
+    print(interest_corr.plot)
+  }
+  if (priceexrate_corr == T) {
+    print(priceexrate_corr.plot)
+  }
+  if (choice_corr == T) {
+    print(choice_corr.plot)
+  }
+}
 
 
 
@@ -212,7 +241,7 @@ var_optimal_lag <- VARselect(data_svar, lag.max = max_lag, type = "both")
 
 #-------------------------------------------------
 # estimate with optimal lag, taking the BIC (== Schwarz Criterion SC)
-var_estimate <- VAR(var_data_amodel[-1, ], # -1 because we have a NA in inflation due to first diff. and this has to be ignored
+var_estimate <- VAR(var_data_model[-1, ], # -1 because we have a NA in inflation due to first diff. and this has to be ignored
                     p = 2, # see explanation above about var_optimal_lag
                     type = "both")
 summary(var_estimate)
