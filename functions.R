@@ -67,3 +67,22 @@ white.theme.date.plot <- function(data, title){
 }
 
 
+
+
+
+# -----------------------------------------------------------------------------
+# 3. clean data II: stationarity
+# -----------------------------------------------------------------------------
+
+# Function returning growth rates 
+growth <- function(data){
+  # calculates growth rate
+  #
+  # Args:
+  #   data: data of which one wants to calculate the growth
+  # Returns:
+  #   growth rate of data
+  first_diff <- diff(data)  / # take first difference
+    data[-length(data)] * 100 # calculate growth rate
+  first_diff # return results
+}

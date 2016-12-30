@@ -98,7 +98,23 @@ if (separate_pdf == T){ # if want to have separate PDF files, create "RawData.pd
 #   create a data frame combining the ones without log and those with
 data_log <- cbind(data[ , which(names(data) %in% no_log)],
                   log(data[ , -which(names(data) %in% no_log)])) # get log of all variables except for those defined as no_log
-data_log <- data_log[, -which(names(data_log) == "Date")] # remove Dates (don't want to HP filter them)
+
+# calculate growth data (after log) if there are some required
+#   function depends on length of variables-vector (with one variable it needs different syntax)
+if (length(growth_variables) != 0 & length(growth_variables) > 1){
+  data_growth <- as.data.frame(sapply(data[, which(names(data) %in% growth_variables)], growth))
+  data_growth <- data_growth[, growth_variables] # order the columns correctly to be able to rename it
+  colnames(data_growth) <- growth_names # rename the columns
+} else if (length(growth_variables) == 1){
+  data_growth <- as.data.frame(growth(data[, which(names(data) %in% growth_variables)]))
+  colnames(data_growth) <- growth_names
+}
+
+# combine data_log with the growth data and remove Date (don't take HP filter of dates)
+#   remark: due to growth calculations 1 data point lost
+data_log <- cbind(data_log[-1, ], data_growth)
+data_log <- data_log[, -which(names(data_log) == "Date")] 
+
 
 
 # use HP-filter to make data stationary, apply on each variable and save as list
@@ -108,7 +124,7 @@ hp_data <- lapply(data_log, hpfilter, freq = lambda)
 data_detrended <- as.data.frame(sapply(hp_data, `[`, "cycle"))
 
 # add Date to data frame again for easier plots (also create it as long format for ggplot)
-data_detrended <- cbind(Date = data$Date, data_detrended)
+data_detrended <- cbind(Date = data$Date[-1], data_detrended)
 data_detrended_long <- melt(data_detrended, id.vars = "Date")
 
 

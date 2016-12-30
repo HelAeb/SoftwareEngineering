@@ -41,15 +41,15 @@ setwd(dir)
 
 
 # -----------------------------------------------------------------------------
-# 1. possible changes with new data set
-#   prerequisites for working code
+# 1. prerequisites for working code
+#    - possible changes with new data set
 # -----------------------------------------------------------------------------
 
 #--------------------
 # saving plots in PDF
 #--------------------
 
-# separate PDF files for graphs of raw data and detrended ones
+# separate PDF files for graphs of raw data, detrended data, correlogram, IRF
 #   T: separate PDF files
 #   F: all plots saved in one PDF file
 separate_pdf <- T
@@ -82,11 +82,17 @@ date <- "X" # variable indicating the dates --> to make sure it is called "Date"
 
 
 #--------------------
-# log of data
+# log of data and growth
 #--------------------
 
 # variables in data which do NOT need to be logarithmized
 no_log <- c("Date", "i10Y", "i3M", "RER")
+
+# variables which have to be taken as growth (e.g. CPI growth == inflation)
+growth_variables <- c("CPI")
+# how to name the variables after taken growth (e.g. CPI growth == inflation)
+#   make sure to have the same length and order of the variables as in growth_variables
+growth_names <- c("INF")
 
 
 
@@ -110,7 +116,7 @@ svar_variables <- c("GDP", "INF", "M1", "i3M")
 
 
 # -----------------------------------------------------------------------------
-# run working code
+# 2. run working code
 # -----------------------------------------------------------------------------
 
 # source the working code
