@@ -29,9 +29,9 @@ rm(list=ls())
 if (Sys.info()[['login']] == 'Helena Aebersold') {
   dir <- 'C:/Users/Helena Aebersold/Dropbox/HSG/Master/HS16/software_engineering_for_economists/SoftwareEngineering/'
 } else if (Sys.info()[['login']] == 'Divna') {
-  dir <- "C:\Users\Divna\Desktop\SoftwareEngineering"
-} else if (Sys.info()[['login']] == 'Feld_Michele') {
-  dir <- ""
+  dir <- "C:/Users/Divna/Documents/Uni/Master/3. Semester/Kontextstudium/Software Engineering for Economists/Group Project/SoftwareEngineering/"
+} else if (Sys.info()[['login']] == 'Michèle') {
+  dir <- "C:/Users/Michèle/Documents/MAHS15/Software_Engineering_for_Economists/SoftwareEngineering"
 } else if (Sys.info()[['login']] == 'Feld_PhilippZahn') {
   dir <- ""
 } else {
@@ -112,6 +112,25 @@ lambda <- 1600 # usually lambda = 1600 for quarterly data
 # define number of lags and leads for correlogram
 lags <- 8
 
+# choose variables to be plotted for dynamic correlogram with ggplot
+# different options available:
+money_corr <- T
+#   T: plot monetary variables together (MB, M1, M2, M3)
+#   F: no such plotting
+interest_corr <- T
+#   T: plot interest rates together (i3M, i10Y)
+#   F: no such plotting
+priceexrate_corr <- T
+#   T: plot price and exchange rate variables together (CPI, COM, RER)
+#   F: no such plotting
+corr_variables <- c("lag", "CPI", "i3M", "M1", "RER")
+# choose variables manually
+#   IMPORTANT: make sure to take "lag" in for reshaping into long format!!!
+choice_corr <- T
+#   T: plot chosen variables together
+#   F: no such plotting
+
+
 
 
 #--------------------
@@ -123,6 +142,7 @@ svar_variables <- c("GDP", "INF", "M1", "i3M")
 
 # choose maximal lag for optimal lag in sVAR
 max_lag <- 8
+
 
 
 
