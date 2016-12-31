@@ -204,27 +204,30 @@ data_svar <- data_svar[, svar_variables_detrended] # make correct order (!!!!!!!
 
 # choose optimal lag
 var_optimal_lag <- VARselect(data_svar, lag.max = max_lag, type = "both")
-print("optimal lags sVAR" var_optimal_lag$selection)
+cat("optimal lags sVAR:", "\n") # print optimal lags in console even if file is sourced
+print(var_optimal_lag$selection)
 
 
-
-
-
-
-#-------------------------------------------------
-# estimate with optimal lag, taking the BIC (== Schwarz Criterion SC)
-var_estimate <- VAR(var_data_amodel[-1, ], # -1 because we have a NA in inflation due to first diff. and this has to be ignored
-                    p = 2, # see explanation above about var_optimal_lag
+# VAR estimates with chosen lag criterion
+criteria <- paste(criteria, "(n)", sep = "")
+var_estimate <- VAR(data_svar,
+                    p = var_optimal_lag$selection[criteria],
                     type = "both")
-summary(var_estimate)
+
+if (summary_stat_var == T){
+  cat("\n", "\n", "summary statistics of VAR estimates:", "\n")
+  print(summary(var_estimate))
+}
 
 
+
+# Cholesky decomposition
 # create A-matrix with NA for those values which have to be estimated
-a_matrix <- matrix(c(1, NA, NA, NA,
-                     0, 1, NA, NA,
-                     0, 0, 1, NA,
-                     0, 0, 0, 1),
-                   4, 4)
+a_matrix <- diag(length(svar_variables))
+to_estimate <- rep(NA, length(which(lower.tri(a_matrix)) == T))
+a_matrix[lower.tri(a_matrix)] <- to_estimate
+
+# sVAR estimates
 svar_estimate <- SVAR(var_estimate, Amat = a_matrix)
 
 
