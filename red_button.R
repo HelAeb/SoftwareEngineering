@@ -7,7 +7,7 @@
 # =============================================================================
 
 # =============================================================================
-# - This File contains the "red button" and possible changes with new data
+# - This File contains the "red button" and possible changes with new data,
 #     it sources the working code
 # =============================================================================
 

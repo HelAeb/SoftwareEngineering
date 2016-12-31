@@ -173,18 +173,18 @@ ccf.data <- as.data.frame(cbind(lag = ccf.data.frame(data_detrended$GDP.cycle, d
 # -----------------------------------------------------------------------------
 # 5. sVAR
 # -----------------------------------------------------------------------------
-# need detrended variable names to get in detrended-matrix
+# need detrended variable names to get data from detrended-matrix
 #   change names of variables to be same as in that matrix
 svar_variables_detrended <- paste(svar_variables, ".cycle", sep = "")
 
-# separate data frame with svar data
+# create separate data frame with svar data
 data_svar <- data_detrended[, which(names(data_detrended) %in% svar_variables_detrended)]
-data_svar <- data_svar[, svar_variables_detrended]
+data_svar <- data_svar[, svar_variables_detrended] # make correct order (!!!!!!!!!)
 
 
 # choose optimal lag
 var_optimal_lag <- VARselect(data_svar, lag.max = max_lag, type = "both")
-
+print("optimal lags sVAR" var_optimal_lag$selection)
 
 
 
