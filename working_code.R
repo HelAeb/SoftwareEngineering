@@ -186,6 +186,35 @@ if (choice_corr == T) {
 }
 
 # get PDF of plotted data
+if (separate_pdf == T) {
+  pdf("Cross-correlations.pdf")
+  if (money_corr == T) {
+    print(money_corr.plot)
+  }
+  if (interest_corr == T) {
+    print(interest_corr.plot)
+  }
+  if (priceexrate_corr == T) {
+    print(priceexrate_corr.plot)
+  }
+  if (choice_corr == T) {
+    print(choice_corr.plot)
+  }
+  dev.off()
+} else {
+  if (money_corr == T) {
+    print(money_corr.plot)
+  }
+  if (interest_corr == T) {
+    print(interest_corr.plot)
+  }
+  if (priceexrate_corr == T) {
+    print(priceexrate_corr.plot)
+  }
+  if (choice_corr == T) {
+    print(choice_corr.plot)
+  }
+}
 
 
 
