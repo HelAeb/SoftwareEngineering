@@ -134,7 +134,7 @@ data_detrended_long <- melt(data_detrended, id.vars = "Date")
 
 # plot for each variable in the data set
 all_variables_cycle <- as.character(unique(data_detrended_long$variable))
-if (separate_pdf == T){ # if want to have separate PDF files, create "RawData.pdf" with these plots
+if (separate_pdf == T){ # if want to have separate PDF files, create "CycleData.pdf" with these plots
   pdf("CycleData.pdf")
   for (i in 1:length(all_variables_cycle)){
     plot <- white.theme.date.plot(subset(data_detrended_long, variable == all_variables_cycle[i]), title = "cycle data")
@@ -234,34 +234,44 @@ svar_estimate <- SVAR(var_estimate, Amat = a_matrix)
 
 
 # IRF calculation
-response <- paste(response, ".cycle", sep = "") # renaming for getting correct data
-impulse <- paste(impulse, ".cycle", sep = "")
+response_cycle <- paste(response, ".cycle", sep = "") # renaming for getting correct data
+impulse_cycle <- paste(impulse, ".cycle", sep = "")
 irf_calculations <- irf(svar_estimate,
-    response = response,
-    impulse = impulse,
+    response = response_cycle,
+    impulse = impulse_cycle,
     n.ahead = n_ahead)
 
 # save IRF data in a data frame
 irf <- as.data.frame(irf_calculations$irf)
-upper <- as.data.frame(irf_calculations$Upper)
-colnames(upper) <- paste(names(upper), ".upper", sep = "")
-lower <- as.data.frame(irf_calculations$Lower)
-colnames(lower) <- paste(names(lower), ".lower", sep = "")
+
+name <- c() # rename the columns
+for (i in 1:length(impulse)){
+  name <- c(name, paste(response, "after", impulse[i], "shock", sep = " "))
+}
+colnames(irf) <- name
 
 
+# add lags to data frame
 irf_data <- cbind("lag" = c(0, seq(1:n_ahead)),
-                  irf,
-                  upper,
-                  lower)
+                  irf)
 
 
 # make long format for ggplot
-melt(irf_data, id.vars = "lag")
+irf_data_long <- melt(irf_data, id.vars = "lag")
 
 
-# plot
-if (separate_pdf == T){ # if want to have separate PDF files, create "RawData.pdf" with these plots
-  pdf("CycleData.pdf")
+
+
+
+
+white.theme.irf.plot(subset(irf_data_long, variable == name[i]))
+
+
+
+
+# plots
+if (separate_pdf == T){ # if want to have separate PDF files, create "IRF.pdf" with these plots
+  pdf("IRF.pdf")
   for (i in 1:length(all_variables_cycle)){
     plot <- white.theme.date.plot(subset(data_detrended_long, variable == all_variables_cycle[i]), title = "cycle data")
     print(plot)
