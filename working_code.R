@@ -233,7 +233,46 @@ svar_estimate <- SVAR(var_estimate, Amat = a_matrix)
 
 
 
+# IRF calculation
+response <- paste(response, ".cycle", sep = "") # renaming for getting correct data
+impulse <- paste(impulse, ".cycle", sep = "")
+irf_calculations <- irf(svar_estimate,
+    response = response,
+    impulse = impulse,
+    n.ahead = n_ahead)
 
+# save IRF data in a data frame
+irf <- as.data.frame(irf_calculations$irf)
+upper <- as.data.frame(irf_calculations$Upper)
+colnames(upper) <- paste(names(upper), ".upper", sep = "")
+lower <- as.data.frame(irf_calculations$Lower)
+colnames(lower) <- paste(names(lower), ".lower", sep = "")
+
+
+irf_data <- cbind("lag" = c(0, seq(1:n_ahead)),
+                  irf,
+                  upper,
+                  lower)
+
+
+# make long format for ggplot
+melt(irf_data, id.vars = "lag")
+
+
+# plot
+if (separate_pdf == T){ # if want to have separate PDF files, create "RawData.pdf" with these plots
+  pdf("CycleData.pdf")
+  for (i in 1:length(all_variables_cycle)){
+    plot <- white.theme.date.plot(subset(data_detrended_long, variable == all_variables_cycle[i]), title = "cycle data")
+    print(plot)
+  }
+  dev.off()
+} else { # else print plots; they are added to the overall plot-PDF
+  for (i in 1:length(all_variables_cycle)){
+    plot <- white.theme.date.plot(subset(data_detrended_long, variable == all_variables_cycle[i]), title = "cycle data")
+    print(plot)
+  }
+}
 
 
 # -----------------------------------------------------------------------------

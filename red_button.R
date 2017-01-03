@@ -156,9 +156,10 @@ criteria <- "SC"
 summary_stat_var <- T
 
 
-# impulse for IRF
-impuls <- c()
-
+# response and impulse for IRF, time ahead
+response <- c("GDP", "INF")
+impulse <- c("M1", "i3M")
+n_ahead <- 20
 
 
 
