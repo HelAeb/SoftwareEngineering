@@ -139,7 +139,7 @@ choice_corr <- T
 
 # variables entering the sVAR model
 #   IMPORTANT: make sure to have the ordering of the variables correct!!!
-svar_variables <- c("GDP", "INF", "M1", "i3M")
+svar_variables <- c("COM", "GDP", "INF", "M1", "i3M")
 
 # choose maximal lag for optimal lag in sVAR
 max_lag <- 8
@@ -148,15 +148,17 @@ max_lag <- 8
 
 # which information criteria to choose for estimations in sVAR
 #   AIC, HQ, SC (= BIC), FPE
+# or put a number for lag
 criteria <- "SC"
 
 # summary statistics of VAR estimates
 #   T: print summary statistics of VAR estimates in console
 #   F: don't print summary statistics of VAR estimates in console
-summary_stat_var <- T
+summary_stat_var <- F
 
 
 # response and impulse for IRF, time ahead
+#   Variables have to be in the model!
 response <- c("GDP", "INF")
 impulse <- c("M1", "i3M")
 n_ahead <- 20

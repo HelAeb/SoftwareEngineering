@@ -154,8 +154,9 @@ white.theme.irf.plot <- function(data){
   #   ggplot on white background, lags on x-axis and values of the variable on y-axis. 
   #   the line type is according to the variables
   plot <- ggplot(data = data,
-                 aes(x = lag, y = value, linetype = variable)) +
+                 aes(x = lag, y = value)) +
     geom_line() +
+    geom_hline(aes(yintercept = 0), col = "grey") +
     scale_linetype("") +
     theme_bw() + 
     theme(plot.background = element_blank(),
@@ -166,7 +167,7 @@ white.theme.irf.plot <- function(data){
     theme(panel.border= element_blank()) +
     theme(axis.line.x = element_line(color="black"),
           axis.line.y = element_line(color="black")) +
-    labs(title = "test")
+    scale_x_continuous(expand = c(0, 0)) +
+    labs(title = paste("IRF of", as.character(unique(data$variable)), sep = " "))
   return(plot)
 }
-

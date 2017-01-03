@@ -208,11 +208,19 @@ cat("optimal lags sVAR:", "\n") # print optimal lags in console even if file is 
 print(var_optimal_lag$selection)
 
 
-# VAR estimates with chosen lag criterion
-criteria <- paste(criteria, "(n)", sep = "")
-var_estimate <- VAR(data_svar,
+# VAR estimates with chosen lag criterion or given lag
+if (is.character(criteria) == T){
+  criteria <- paste(criteria, "(n)", sep = "")
+  var_estimate <- VAR(data_svar,
                     p = var_optimal_lag$selection[criteria],
                     type = "both")
+} else {
+  var_estimate <- VAR(data_svar,
+                      p = criteria,
+                      type = "both")
+}
+
+
 
 if (summary_stat_var == T){
   cat("\n", "\n", "summary statistics of VAR estimates:", "\n")
@@ -244,11 +252,11 @@ irf_calculations <- irf(svar_estimate,
 # save IRF data in a data frame
 irf <- as.data.frame(irf_calculations$irf)
 
-name <- c() # rename the columns
+irf_name <- c() # rename the columns
 for (i in 1:length(impulse)){
-  name <- c(name, paste(response, "after", impulse[i], "shock", sep = " "))
+  irf_name <- c(irf_name, paste(response, "after", impulse[i], "shock", sep = " "))
 }
-colnames(irf) <- name
+colnames(irf) <- irf_name
 
 
 # add lags to data frame
@@ -260,29 +268,23 @@ irf_data <- cbind("lag" = c(0, seq(1:n_ahead)),
 irf_data_long <- melt(irf_data, id.vars = "lag")
 
 
-
-
-
-
-white.theme.irf.plot(subset(irf_data_long, variable == name[i]))
-
-
-
-
-# plots
+# IRF plots
 if (separate_pdf == T){ # if want to have separate PDF files, create "IRF.pdf" with these plots
   pdf("IRF.pdf")
-  for (i in 1:length(all_variables_cycle)){
-    plot <- white.theme.date.plot(subset(data_detrended_long, variable == all_variables_cycle[i]), title = "cycle data")
+  for (i in 1:length(irf_name)){
+    plot <- white.theme.irf.plot(subset(irf_data_long, variable == irf_name[i]))
     print(plot)
   }
   dev.off()
 } else { # else print plots; they are added to the overall plot-PDF
-  for (i in 1:length(all_variables_cycle)){
-    plot <- white.theme.date.plot(subset(data_detrended_long, variable == all_variables_cycle[i]), title = "cycle data")
+  for (i in 1:length(irf_name)){
+    plot <- white.theme.irf.plot(subset(irf_data_long, variable == irf_name[i]))
     print(plot)
   }
 }
+
+
+
 
 
 # -----------------------------------------------------------------------------
