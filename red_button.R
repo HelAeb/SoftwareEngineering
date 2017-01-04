@@ -112,14 +112,15 @@ lambda <- 1600 # usually lambda = 1600 for quarterly data
 # define number of lags and leads for correlogram
 lags <- 8
 
+# choose basis data, variable against which correlations will be computed
+corr_core <- c("GDP.cycle")
 
-corr_variables <- c("lag", "CPI", "i3M", "M1", "RER")
-# choose variables manually
+# choose variables to be plotted in dynamic correlogram
 #   IMPORTANT: make sure to take "lag" in for reshaping into long format!!!
-choice_corr <- T
-#   T: plot chosen variables together
-#   F: no such plotting
+corr_variables <- c("lag", "CPI.cycle", "i3M.cycle", "M1.cycle", "RER.cycle")
 
+# here: dynamic correlations of GDP against CPI, i3M, M1 and RER is computed as an example
+#   IMPORTANT: don't forget to add ".cycle" to name of variable to match with name of detrended data which is used for computation
 
 
 
