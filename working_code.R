@@ -155,65 +155,29 @@ if (separate_pdf == T){ # if want to have separate PDF files, create "CycleData.
 # 4. correlogramm
 # -----------------------------------------------------------------------------
 
-# computing correlogramm against GDP for each variable and putting all in data frame
-ccf.data <- as.data.frame(cbind(lag = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$CPI.cycle, lags)$lag,
-                                CPI = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$CPI.cycle, lags)$correlation,
-                                i3M = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$i3M.cycle, lags)$correlation,
-                                i10Y = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$i10Y.cycle, lags)$correlation,
-                                COM = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$COM.cycle, lags)$correlation,
-                                MB = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$MB.cycle, lags)$correlation,
-                                M1 = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$M1.cycle, lags)$correlation,
-                                M2 = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$M2.cycle, lags)$correlation,
-                                M3 = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$M3.cycle, lags)$correlation,
-                                RER = ccf.data.frame(data_detrended$GDP.cycle, data_detrended$RER.cycle, lags)$correlation))
+# computing dynamic correlations against chosen variable corr_core in red_button for each variable in detrended data
+#   and put together into one data frame
+# get lags
+ccf.data <- as.data.frame(cbind(lag = ccf.data.frame(data_detrended[1], data_detrended[1], lags)$lag))
+# get correlations
+for (i in 1:length(data_detrended)) {
+  ccf.data[i+1] <- as.data.frame(ccf.data.frame(data_detrended[corr_core], data_detrended[i], lags)$correlation)
+}
+
+# set names of columns 
+colnames(ccf.data) <- c("lag", colnames(data_detrended[1:length(data_detrended)]))
 
 # get specified data in red_button together in long format and plot with ggplot
-  if (money_corr == T) {
-  ccf.data.money <- melt(ccf.data[, c("lag", "MB", "M1", "M2", "M3")], id = "lag")
-  money_corr.plot <- corr.plot(ccf.data.money$lag, ccf.data.money$value, ccf.data.money)
-}
-if (interest_corr == T) {
-  ccf.data.interest <- melt(ccf.data[, c("lag", "i3M", "i10Y")], id = "lag")
-  interest_corr.plot <- corr.plot(ccf.data.interest$lag, ccf.data.interest$value, ccf.data.interest)
-}
-if (priceexrate_corr == T) {
-  ccf.data.priceexrate <- melt(ccf.data[, c("lag", "CPI", "COM", "RER")], id = "lag")
-  priceexrate_corr.plot <- corr.plot(ccf.data.priceexrate$lag, ccf.data.priceexrate$value, ccf.data.priceexrate)
-}
-if (choice_corr == T) {
-  ccf.data.choice <- melt(ccf.data[, c(corr_variables)], id = "lag")
-  choice_corr.plot <- corr.plot(ccf.data.choice$lag, ccf.data.choice$value, ccf.data.choice)
-}
+ccf.data.choice <- melt(ccf.data[, c(corr_variables)], id = "lag")
+choice_corr.plot <- corr.plot(ccf.data.choice$lag, ccf.data.choice$value, ccf.data.choice)
 
 # get PDF of plotted data
 if (separate_pdf == T) {
   pdf("Cross-correlations.pdf")
-  if (money_corr == T) {
-    print(money_corr.plot)
-  }
-  if (interest_corr == T) {
-    print(interest_corr.plot)
-  }
-  if (priceexrate_corr == T) {
-    print(priceexrate_corr.plot)
-  }
-  if (choice_corr == T) {
-    print(choice_corr.plot)
-  }
+  print(choice_corr.plot)
   dev.off()
 } else {
-  if (money_corr == T) {
-    print(money_corr.plot)
-  }
-  if (interest_corr == T) {
-    print(interest_corr.plot)
-  }
-  if (priceexrate_corr == T) {
-    print(priceexrate_corr.plot)
-  }
-  if (choice_corr == T) {
-    print(choice_corr.plot)
-  }
+  print(choice_corr.plot)
 }
 
 
