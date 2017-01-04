@@ -112,17 +112,7 @@ lambda <- 1600 # usually lambda = 1600 for quarterly data
 # define number of lags and leads for correlogram
 lags <- 8
 
-# choose variables to be plotted for dynamic correlogram with ggplot
-# different options available:
-money_corr <- T
-#   T: plot monetary variables together (MB, M1, M2, M3)
-#   F: no such plotting
-interest_corr <- T
-#   T: plot interest rates together (i3M, i10Y)
-#   F: no such plotting
-priceexrate_corr <- T
-#   T: plot price and exchange rate variables together (CPI, COM, RER)
-#   F: no such plotting
+
 corr_variables <- c("lag", "CPI", "i3M", "M1", "RER")
 # choose variables manually
 #   IMPORTANT: make sure to take "lag" in for reshaping into long format!!!
