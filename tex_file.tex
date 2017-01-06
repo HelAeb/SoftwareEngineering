@@ -27,8 +27,28 @@
 	\author{Helena Aebersold (10-605-921), \\ Divna Nikolic (12-614-715), \\ Michèle Schoch (10-607-448)}
 	\maketitle
 	
-	
-	
-	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Code to connect R and latex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+% source file with R Codes from wd
+<<fig = F, echo = F, results = hide>>=
+source("./red_button.R")
+@		
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Ex. 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagenumbering{arabic}
+\newpage
+\section{Excercise 1}
+\begin{figure}[H]
+	\caption{IRF}
+	\label{ex1}
+	\centering
+	<<fig = T, echo = F, height = 6, width = 6>>=
+	plot1 <- white.theme.irf.plot(subset(irf_data_long, variable == irf_name[1]))
+	print(plot1)
+	@
+\end{figure}
+
+
+
 \end{document}
 
