@@ -152,32 +152,37 @@ if (separate_pdf == T){ # if want to have separate PDF files, create "CycleData.
 
 
 # -----------------------------------------------------------------------------
-# 4. correlogramm
+# 4. correlogramm: dynamic correlations
 # -----------------------------------------------------------------------------
 
-# computing dynamic correlations against chosen variable corr_core in red_button for each variable in detrended data
-#   and put together into one data frame
-# get lags
-ccf.data <- as.data.frame(cbind(lag = ccf.data.frame(data_detrended[1], data_detrended[1], lags)$lag))
-# get correlations
-for (i in 1:length(data_detrended)) {
-  ccf.data[i+1] <- as.data.frame(ccf.data.frame(data_detrended[corr_core], data_detrended[i], lags)$correlation)
-}
+# lag and leads
+lag_lead <- -lag_corr:lag_corr
 
-# set names of columns 
-colnames(ccf.data) <- c("lag", colnames(data_detrended[1:length(data_detrended)]))
+# rename to get correct data from detrended data frame
+corr_core <- paste(corr_core, ".cycle", sep = "")
+corr_variables <- paste(corr_variables, ".cycle", sep = "")
 
-# get specified data in red_button together in long format and plot with ggplot
-ccf.data.choice <- melt(ccf.data[, c(corr_variables)], id = "lag")
-choice_corr.plot <- corr.plot(ccf.data.choice$lag, ccf.data.choice$value, ccf.data.choice)
+# calculate the correlations
+correlations <- sapply(data_detrended[, which(names(data_detrended) %in% corr_variables)],
+                        corr.data, # apply function corr.data which calculates and gets the correlations
+                        x = data_detrended[corr_core], # correlated against the corr_core variable
+                        lags = lag_corr)
 
-# get PDF of plotted data
-if (separate_pdf == T) {
-  pdf("Cross-correlations.pdf")
-  print(choice_corr.plot)
+# combine in data frame with lags
+correlation_data <- cbind(lag_lead,
+                          as.data.frame(correlations))
+correlation_data_long <- melt(correlation_data, id.vars = "lag_lead")
+
+
+# plots
+if (separate_pdf == T){ # if want to have separate PDF files, create "IRF.pdf" with these plots
+  pdf("Correlogram.pdf")
+  plot <- corr.plot(correlation_data_long)
+  print(plot)
   dev.off()
-} else {
-  print(choice_corr.plot)
+} else { # else print plots; they are added to the overall plot-PDF
+  plot <- corr.plot(correlation_data_long)
+  print(plot)
 }
 
 
@@ -196,7 +201,7 @@ data_svar <- data_svar[, svar_variables_detrended] # make correct order (!!!!!!!
 
 
 # choose optimal lag
-var_optimal_lag <- VARselect(data_svar, lag.max = max_lag, type = "both")
+var_optimal_lag <- VARselect(data_svar, lag.max = max_lag_svar, type = "both")
 cat("optimal lags sVAR:", "\n") # print optimal lags in console even if file is sourced
 print(var_optimal_lag$selection)
 

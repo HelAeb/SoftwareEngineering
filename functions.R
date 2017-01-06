@@ -91,46 +91,49 @@ growth <- function(data){
 
 
 # -----------------------------------------------------------------------------
-# 4. correlogramm
+# 4. correlogramm: dynamic correlations
 # -----------------------------------------------------------------------------
 
-# function computing dynamic correlogram and putting it together into a data frame
-ccf.data.frame <- function(x, y, lags) {
-  # makes a data frame out of ccf (cross-correlation function) for ggplot
+# Function returning correlation calculations
+corr.data <- function(x, y, lags) {
+  # returns the correlations (acf data of the ccf function)
   #
   # Args:
   #   x, y: time series data
-  #   lags: number of lags and leads (specified in red_button)
+  #   lags: number of lags and leads
   # 
   # Returns:
-  #   a data frame containing the lags and cross-correlations
+  #   the correlation data (acf) of the ccf function
   ccf.data <- ccf(x, y, lag.max = lags, type = "correlation", plot = F)
-  ccf.df <- data.frame(lag = ccf.data$lag,
-                       correlation = ccf.data$acf)
+  correlation <- ccf.data$acf
+  return(correlation)
 }
 
-# function for plotting chosen data with ggplot for correlogram
-corr.plot <- function(x, y, choice.variables) {
-  # makes ggplot with dynamic correlation and with white background theme
+
+# Function plotting dynamic correlogram
+corr.plot <- function(data) {
+  # returns dynamic correlation plot with white theme
   #
   # Args: 
-  #   x, y: time series data
-  #   choice.variables: data frame with chosen variables according options in red_button
+  #   data = data set containing lag_lead and correlations
   #
   # Returns:
-  #   ggplot with lags and leads on x-axis and correlation on y-axis
-  ggplot(choice.variables, aes(x = x, y = y, linetype = variable)) +
-         geom_line() +
-         scale_linetype("") +
-         labs(x = "Lags", y = "Cross-correlation") +
-         theme_bw() + 
-         theme(plot.background = element_blank(),
-               panel.grid.major = element_blank(),
-               panel.grid.minor = element_blank(),
-               legend.key = element_blank()) +
-         theme(panel.border= element_blank()) +
-         theme(axis.line.x = element_line(color="black"),
-               axis.line.y = element_line(color="black"))
+  #   dynamic correlation with lag/lead on x-axis and cross correlations on y-axis
+  plot <- ggplot(data = data,
+                 aes(x = lag_lead, y = value, linetype = variable)) +
+    geom_line() +
+    scale_linetype("") +
+    labs(x = "Lags", y = "Cross-correlation") +
+    theme_bw() + 
+    theme(plot.background = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          legend.key = element_blank()) +
+    theme(panel.border= element_blank()) +
+    theme(axis.line.x = element_line(color="black"),
+          axis.line.y = element_line(color="black")) +
+  labs(title = "dynamic correlations")
+  return(plot)
 }
 
 

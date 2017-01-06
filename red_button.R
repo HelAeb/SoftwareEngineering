@@ -109,18 +109,14 @@ lambda <- 1600 # usually lambda = 1600 for quarterly data
 # Correlations variables
 #--------------------
 
-# define number of lags and leads for correlogram
-lags <- 8
+# number of lags/leads for correlogram
+lag_corr <- 8
 
-# choose basis data, variable against which correlations will be computed
-corr_core <- c("GDP.cycle")
+# variable against which correlations will be computed (one variable only)
+corr_core <- c("GDP")
 
-# choose variables to be plotted in dynamic correlogram
-#   IMPORTANT: make sure to take "lag" in for reshaping into long format!!!
-corr_variables <- c("lag", "CPI.cycle", "i3M.cycle", "M1.cycle", "RER.cycle")
-
-# here: dynamic correlations of GDP against CPI, i3M, M1 and RER is computed as an example
-#   IMPORTANT: don't forget to add ".cycle" to name of variable to match with name of detrended data which is used for computation
+# variables correlated against corr_core
+corr_variables <- c("MB", "M1", "M2")
 
 
 
@@ -133,7 +129,7 @@ corr_variables <- c("lag", "CPI.cycle", "i3M.cycle", "M1.cycle", "RER.cycle")
 svar_variables <- c("COM", "GDP", "INF", "M1", "i3M")
 
 # choose maximal lag for optimal lag in sVAR
-max_lag <- 8
+max_lag_svar <- 8
 ## remark: optimal lags result will be printed in console,
 ##    which to chose can still be defined by chosing other information criteria
 
