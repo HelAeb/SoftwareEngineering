@@ -11,6 +11,7 @@
 # - This File contains the working code and is sourced by the red button file
 # =============================================================================
 
+
 # -----------------------------------------------------------------------------
 # start PDF for plots
 # -----------------------------------------------------------------------------
@@ -18,6 +19,7 @@
 if (separate_pdf == F){
   pdf("Plots.pdf")
 }
+
 
 
 
@@ -37,6 +39,7 @@ invisible(GetPackages(packageList))
 
 
 
+
 # -----------------------------------------------------------------------------
 # 0. load data
 # -----------------------------------------------------------------------------
@@ -47,6 +50,7 @@ names(data)[names(data) == date] <- "Date" # make sure the variable Date is call
 
 
 
+
 # -----------------------------------------------------------------------------
 # 1. clean data I: remove all NA, Date format for dates
 # -----------------------------------------------------------------------------
@@ -54,11 +58,12 @@ names(data)[names(data) == date] <- "Date" # make sure the variable Date is call
 # check if there are NA and remove them entirely from data set
 data <- na.omit(data)
 
-
 # make X as date format, use it as rownames
 data$Date <- as.Date(as.yearqtr(as.character(data$Date),
                               format = "%Y-Q%q"))
 rownames(data) <- data$Date
+
+
 
 
 # -----------------------------------------------------------------------------
@@ -66,7 +71,6 @@ rownames(data) <- data$Date
 # -----------------------------------------------------------------------------
 # create long format for ggplot
 data_long <- melt(data, id.vars = "Date")
-
 
 # use the created function "white.theme.date.plot" to create ggplot with data on white background theme.
 #   x-axis = Date, y-axis = value, line type = variables used
@@ -114,8 +118,6 @@ if (length(growth_variables) != 0 & length(growth_variables) > 1){
 #   remark: due to growth calculations 1 data point lost
 data_log <- cbind(data_log[-1, ], data_growth)
 data_log <- data_log[, -which(names(data_log) == "Date")] 
-
-
 
 # use HP-filter to make data stationary, apply on each variable and save as list
 hp_data <- lapply(data_log, hpfilter, freq = lambda)
@@ -173,9 +175,8 @@ correlation_data <- cbind(lag_lead,
                           as.data.frame(correlations))
 correlation_data_long <- melt(correlation_data, id.vars = "lag_lead")
 
-
 # plots
-if (separate_pdf == T){ # if want to have separate PDF files, create "IRF.pdf" with these plots
+if (separate_pdf == T){ # if want to have separate PDF files, create "Correlogram.pdf" with these plots
   pdf("Correlogram.pdf")
   plot <- corr.plot(correlation_data_long)
   print(plot)
@@ -200,12 +201,10 @@ svar_variables_detrended <- paste(svar_variables, ".cycle", sep = "")
 data_svar <- data_detrended[, which(names(data_detrended) %in% svar_variables_detrended)]
 data_svar <- data_svar[, svar_variables_detrended] # make correct order (!!!!!!!!!)
 
-
 # choose optimal lag
 var_optimal_lag <- VARselect(data_svar, lag.max = max_lag_svar, type = "both")
 cat("optimal lags sVAR:", "\n") # print optimal lags in console even if file is sourced
 print(var_optimal_lag$selection)
-
 
 # VAR estimates with chosen lag criterion or given lag
 if (is.character(criteria) == T){
@@ -219,14 +218,10 @@ if (is.character(criteria) == T){
                       type = "both")
 }
 
-
-
 if (summary_stat_var == T){
   cat("\n", "\n", "summary statistics of VAR estimates:", "\n")
   print(summary(var_estimate))
 }
-
-
 
 # Cholesky decomposition
 # create A-matrix with NA for those values which have to be estimated
@@ -236,9 +231,6 @@ a_matrix[lower.tri(a_matrix)] <- to_estimate
 
 # sVAR estimates
 svar_estimate <- SVAR(var_estimate, Amat = a_matrix)
-
-
-
 
 # IRF calculation
 response_cycle <- paste(response, ".cycle", sep = "") # renaming for getting correct data
@@ -257,15 +249,12 @@ for (i in 1:length(impulse)){
 }
 colnames(irf) <- irf_name
 
-
 # add lags to data frame
 irf_data <- cbind("lag" = c(0, seq(1:n_ahead)),
                   irf)
 
-
 # make long format for ggplot
 irf_data_long <- melt(irf_data, id.vars = "lag")
-
 
 # IRF plots
 if (separate_pdf == T){ # if want to have separate PDF files, create "IRF.pdf" with these plots
@@ -281,9 +270,6 @@ if (separate_pdf == T){ # if want to have separate PDF files, create "IRF.pdf" w
     print(plot)
   }
 }
-
-
-
 
 
 
