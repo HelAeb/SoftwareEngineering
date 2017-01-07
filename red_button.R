@@ -52,7 +52,7 @@ setwd(dir)
 # separate PDF files for graphs of raw data, detrended data, correlogram, IRF
 #   T: separate PDF files
 #   F: all plots saved in one PDF file
-separate_pdf <- T
+separate_pdf <- F
 
 
 #--------------------

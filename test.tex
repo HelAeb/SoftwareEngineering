@@ -1,0 +1,68 @@
+\documentclass[11pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath, amsfonts, amssymb, amsthm, color, ulem, graphicx}
+\usepackage{geometry}
+\geometry{verbose,a4paper,tmargin=30mm,bmargin=30mm,lmargin=27mm,rmargin=27mm}
+\usepackage{color}
+\usepackage{gensymb}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage[T1]{fontenc}
+\usepackage{Sweave}
+\SweaveOpts{concordance=TRUE}
+\usepackage{grffile}
+\usepackage{natbib}
+\usepackage{float}
+\renewcommand\thesection{\arabic{section}}
+\lhead{Aebersold, Nikolic, Schoch}
+\rhead{Software Engineering}
+\fancyheadoffset{0.2cm}
+\renewcommand{\footrulewidth}{0.4pt}
+
+
+\begin{document}
+
+\title{\textbf{Software Engineering} \\ \vspace{40pt} Group Project}
+\author{Helena Aebersold (10-605-921), \\ Divna Nikolic (12-614-715), \\ Michèle Schoch (xx-xxx-xxx)}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Preliminary Code Junk
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+<<fig = F, echo = F, results = hide>>=
+
+# Source function file (from wd)
+source("./red_button.R")
+
+@
+
+
+\pagenumbering{arabic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Dynamic Correlation
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section*{Dynamic correlation}
+
+\begin{figure}[H]
+\caption{Dynamic correlation of xxxxxxxx}
+\label{dyn_corr}
+\centering
+<<fig = T, echo = F, height = 6, width = 12>>=
+corr_plot
+@
+\end{figure}
+
+
+
+\end{document}
+

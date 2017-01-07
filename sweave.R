@@ -1,9 +1,9 @@
 # =============================================================================
 # University of St.Gallen
-# Course: HS16-7,610,1.00 Software Engineering for Economists
-# Authors: Helena Aebersold, Divna Nikolic, Michèle Schoch
-# Professor: Dr. Philipp Zahn
-# Date: 28.12.2016
+# Course: HS16-9,272,1.00 Economics of Central Banking
+# Author: Helena Aebersold
+# Professor: Dr. Nicolas Cuche-Curti
+# Date: 20.10.2016
 # =============================================================================
 
 # =============================================================================
@@ -25,11 +25,9 @@
 # Set working directory
 if (Sys.info()[['login']] == 'Helena Aebersold') {
   dir <- 'C:/Users/Helena Aebersold/Dropbox/HSG/Master/HS16/software_engineering_for_economists/SoftwareEngineering/'
-} else if (Sys.info()[['login']] == 'Divna') {
-  dir <- "C:/Users/Divna/Documents/Uni/Master/3. Semester/Kontextstudium/Software Engineering for Economists/Group Project/SoftwareEngineering/"
-} else if (Sys.info()[['login']] == 'Michèle') {
-  dir <- "C:/Users/Michèle/Documents/MAHS15/Software_Engineering_for_Economists/SoftwareEngineering"
-} else if (Sys.info()[['login']] == 'Feld_PhilippZahn') {
+} else if (Sys.info()[['login']] == '') {
+  dir <- ""
+} else if (Sys.info()[['login']] == '') {
   dir <- ""
 } else {
   dir <- getwd()
@@ -39,8 +37,8 @@ setwd(dir)
 
 
 
-Sweave("tex_file.tex")
-
+Sweave("test.tex")
+#
 
 # if you have problems running that .tex file in LateX, then make sure to adjust
 #   the roots:
