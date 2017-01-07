@@ -189,6 +189,102 @@ if (separate_pdf == T){ # if want to have separate PDF files, create "IRF.pdf" w
 
 
 
+# -----------------------------------------------------------------------------
+# 5. sVAR
+# -----------------------------------------------------------------------------
+# need detrended variable names to get data from detrended-matrix
+#   change names of variables to be same as in that matrix
+svar_variables_detrended <- paste(svar_variables, ".cycle", sep = "")
+
+# create separate data frame with svar data
+data_svar <- data_detrended[, which(names(data_detrended) %in% svar_variables_detrended)]
+data_svar <- data_svar[, svar_variables_detrended] # make correct order (!!!!!!!!!)
+
+
+# choose optimal lag
+var_optimal_lag <- VARselect(data_svar, lag.max = max_lag_svar, type = "both")
+cat("optimal lags sVAR:", "\n") # print optimal lags in console even if file is sourced
+print(var_optimal_lag$selection)
+
+
+# VAR estimates with chosen lag criterion or given lag
+if (is.character(criteria) == T){
+  criteria <- paste(criteria, "(n)", sep = "")
+  var_estimate <- VAR(data_svar,
+                      p = var_optimal_lag$selection[criteria],
+                      type = "both")
+} else {
+  var_estimate <- VAR(data_svar,
+                      p = criteria,
+                      type = "both")
+}
+
+
+
+if (summary_stat_var == T){
+  cat("\n", "\n", "summary statistics of VAR estimates:", "\n")
+  print(summary(var_estimate))
+}
+
+
+
+# Cholesky decomposition
+# create A-matrix with NA for those values which have to be estimated
+a_matrix <- diag(length(svar_variables))
+to_estimate <- rep(NA, length(which(lower.tri(a_matrix)) == T))
+a_matrix[lower.tri(a_matrix)] <- to_estimate
+
+# sVAR estimates
+svar_estimate <- SVAR(var_estimate, Amat = a_matrix)
+
+
+
+
+# IRF calculation
+response_cycle <- paste(response, ".cycle", sep = "") # renaming for getting correct data
+impulse_cycle <- paste(impulse, ".cycle", sep = "")
+irf_calculations <- irf(svar_estimate,
+                        response = response_cycle,
+                        impulse = impulse_cycle,
+                        n.ahead = n_ahead)
+
+# save IRF data in a data frame
+irf <- as.data.frame(irf_calculations$irf)
+
+irf_name <- c() # rename the columns
+for (i in 1:length(impulse)){
+  irf_name <- c(irf_name, paste(response, "after", impulse[i], "shock", sep = " "))
+}
+colnames(irf) <- irf_name
+
+
+# add lags to data frame
+irf_data <- cbind("lag" = c(0, seq(1:n_ahead)),
+                  irf)
+
+
+# make long format for ggplot
+irf_data_long <- melt(irf_data, id.vars = "lag")
+
+
+# IRF plots
+if (separate_pdf == T){ # if want to have separate PDF files, create "IRF.pdf" with these plots
+  pdf("IRF.pdf")
+  for (i in 1:length(irf_name)){
+    plot <- white.theme.irf.plot(subset(irf_data_long, variable == irf_name[i]))
+    print(plot)
+  }
+  dev.off()
+} else { # else print plots; they are added to the overall plot-PDF
+  for (i in 1:length(irf_name)){
+    plot <- white.theme.irf.plot(subset(irf_data_long, variable == irf_name[i]))
+    print(plot)
+  }
+}
+
+
+
+
 
 
 # -----------------------------------------------------------------------------

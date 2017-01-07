@@ -53,6 +53,7 @@ source("./red_button.R")
 \newpage
 \section*{Dynamic correlation}
 
+
 \begin{figure}[H]
 \caption{Dynamic correlation of xxxxxxxx}
 \label{dyn_corr}
@@ -62,6 +63,24 @@ plot <- corr.plot(correlation_data_long)
 print(plot)
 @
 \end{figure}
+
+
+
+\section*{sVAR model}
+
+\begin{figure}[H]
+\caption{impuls response functions (IRF)}
+\label{irf}
+\centering
+<<fig = T, echo = F, height = 6, width = 15>>=
+plot <- list()
+for (i in 1:length(irf_name)){
+plot[[i]] <- white.theme.irf.plot(subset(irf_data_long, variable == irf_name[i]))
+}
+do.call(grid.arrange, plot)
+@
+\end{figure}
+
 
 
 
