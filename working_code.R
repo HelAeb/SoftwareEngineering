@@ -185,7 +185,6 @@ if (separate_pdf == T){ # if want to have separate PDF files, create "IRF.pdf" w
   print(plot)
 }
 
-corr_plot <- corr.plot(correlation_data_long)
 
 
 

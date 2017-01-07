@@ -58,7 +58,8 @@ source("./red_button.R")
 \label{dyn_corr}
 \centering
 <<fig = T, echo = F, height = 6, width = 12>>=
-corr_plot
+plot <- corr.plot(correlation_data_long)
+print(plot)
 @
 \end{figure}
 
