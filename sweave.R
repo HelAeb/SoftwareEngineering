@@ -37,7 +37,7 @@ setwd(dir)
 
 
 
-Sweave("test.tex")
+Sweave("tex_file.tex")
 #
 
 # if you have problems running that .tex file in LateX, then make sure to adjust
