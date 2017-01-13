@@ -161,18 +161,21 @@ if (separate_pdf == T){ # if want to have separate PDF files, create "CycleData.
 lag_lead <- -lag_corr:lag_corr
 
 # rename to get correct data from detrended data frame
-corr_core <- paste(corr_core, ".cycle", sep = "")
-corr_variables <- paste(corr_variables, ".cycle", sep = "")
+corr_core_name <- paste(corr_core, ".cycle", sep = "")
+
+corr_variables_name <- paste(corr_variables, ".cycle", sep = "")
 
 # calculate the correlations
-correlations <- sapply(data_detrended[, which(names(data_detrended) %in% corr_variables)],
+correlations <- sapply(data_detrended[, which(names(data_detrended) %in% corr_variables_name)],
                         corr.data, # apply function corr.data which calculates and gets the correlations
-                        x = data_detrended[corr_core], # correlated against the corr_core variable
+                        x = data_detrended[corr_core_name], # correlated against the corr_core_name variable
                         lags = lag_corr)
+correlations_dataframe <- as.data.frame(correlations) # make data frame and rename it for plots
+names(correlations_dataframe) <- corr_variables
 
 # combine in data frame with lags
 correlation_data <- cbind(lag_lead,
-                          as.data.frame(correlations))
+                          correlations_dataframe)
 correlation_data_long <- melt(correlation_data, id.vars = "lag_lead")
 
 # plots

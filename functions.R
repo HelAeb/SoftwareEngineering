@@ -132,7 +132,7 @@ corr.plot <- function(data) {
     theme(panel.border= element_blank()) +
     theme(axis.line.x = element_line(color="black"),
           axis.line.y = element_line(color="black")) +
-  labs(title = "dynamic correlations")
+  labs(title = paste("Dynamic Correlation with", corr_core, sep = " "))
   return(plot)
 }
 
