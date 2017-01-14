@@ -1,7 +1,7 @@
 # =============================================================================
 # University of St.Gallen
 # Course: HS16-7,610,1.00 Software Engineering for Economists
-# Authors: Helena Aebersold, Divna Nikolic, Michèle Schoch
+# Authors: Helena Aebersold, Divna Nikolic, Mich?le Schoch
 # Professor: Dr. Philipp Zahn
 # Date: 28.12.2016
 # =============================================================================
@@ -20,18 +20,18 @@
 rm(list=ls())
 
 # Set working directory
-## Erklärung:
+## Erkl?rung:
 ## Sys.info()[['login']] unten in die Konsole eingeben und den Output dieses Befehls
 ## in das unten vorbereitete Feld (zb: 'Feld_Divna') eingeben. (Vergesst die ' ' nicht, vgl. 'Helena Aebersold')
 ## Danach gebt ihr eure Ordnerstruktur / working directory in das vorbereitete Feld ein.
-## Wenn das gemacht ist, können wir allen in diesem File arbeiten, ohne dass wir jedes mal 
-## die Ordnerstruktur anpassen müssen.
+## Wenn das gemacht ist, k?nnen wir allen in diesem File arbeiten, ohne dass wir jedes mal 
+## die Ordnerstruktur anpassen m?ssen.
 if (Sys.info()[['login']] == 'Helena Aebersold') {
   dir <- 'C:/Users/Helena Aebersold/Dropbox/HSG/Master/HS16/software_engineering_for_economists/SoftwareEngineering/'
 } else if (Sys.info()[['login']] == 'Divna') {
   dir <- "C:/Users/Divna/Documents/Uni/Master/3. Semester/Kontextstudium/Software Engineering for Economists/Group Project/SoftwareEngineering/"
-} else if (Sys.info()[['login']] == 'Michèle') {
-  dir <- "C:/Users/Michèle/Documents/MAHS15/Software_Engineering_for_Economists/SoftwareEngineering"
+} else if (Sys.info()[['login']] == 'Mich?le') {
+  dir <- "C:/Users/Mich?le/Documents/MAHS15/Software_Engineering_for_Economists/SoftwareEngineering"
 } else if (Sys.info()[['login']] == 'Feld_PhilippZahn') {
   dir <- ""
 } else {
@@ -116,7 +116,7 @@ lag_corr <- 8
 corr_core <- c("GDP")
 
 # variables correlated against corr_core
-corr_variables <- c("MB", "M1", "M2")
+corr_variables <- c("MB", "M1", "M2", "M3")
 
 
 

@@ -25,10 +25,10 @@
 # Set working directory
 if (Sys.info()[['login']] == 'Helena Aebersold') {
   dir <- 'C:/Users/Helena Aebersold/Dropbox/HSG/Master/HS16/software_engineering_for_economists/SoftwareEngineering/'
-} else if (Sys.info()[['login']] == '') {
-  dir <- ""
-} else if (Sys.info()[['login']] == '') {
-  dir <- ""
+} else if (Sys.info()[['login']] == 'Divna') {
+  dir <- 'C:/Users/Divna/Documents/Uni/Master/3. Semester/Kontextstudium/Software Engineering for Economists/Group Project/SoftwareEngineering/'
+} else if (Sys.info()[['login']] == 'Michèle') {
+  dir <- 'C:/Users/Michèle/Documents/MAHS15/Software_Engineering_for_Economists/SoftwareEngineering'
 } else {
   dir <- getwd()
 }
