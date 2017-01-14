@@ -21,19 +21,16 @@
 # The Sweave command is used in package "utils". Set your working directory right
 #   and run this code, which will return a .tex file
 
+
 # Set working directory
 if (Sys.info()[['login']] == 'Helena Aebersold') {
   dir <- 'C:/Users/Helena Aebersold/Dropbox/HSG/Master/HS16/software_engineering_for_economists/SoftwareEngineering/'
 } else if (Sys.info()[['login']] == 'Divna') {
-<<<<<<< HEAD
   dir <- 'C:/Users/Divna/Documents/Uni/Master/3. Semester/Kontextstudium/Software Engineering for Economists/Group Project/SoftwareEngineering/'
-} else if (Sys.info()[['login']] == 'MichÃ¨le') {
-  dir <- 'C:/Users/MichÃ¨le/Documents/MAHS15/Software_Engineering_for_Economists/SoftwareEngineering'
-=======
-  dir <- "C:/Users/Divna/Documents/Uni/Master/3. Semester/Kontextstudium/Software Engineering for Economists/Group Project/SoftwareEngineering/"
-} else if (Sys.info()[['login']] == '') {
+} else if (Sys.info()[['login']] == 'Michèle') {
+  dir <- 'C:/Users/Michèle/Documents/MAHS15/Software_Engineering_for_Economists/SoftwareEngineering'
+} else if (Sys.info()[['login']] == 'Feld_PhilippZahn') {
   dir <- ""
->>>>>>> 28a56db9f4f5d6dc8eaadffef9fd6889993cca41
 } else {
   dir <- getwd()
 }
@@ -43,6 +40,5 @@ setwd(dir)
 Sweave("tex_file.tex")
 
 
-# if you have problems running that .tex file in LateX, then make sure to adjust
-#   the roots:
-# http://tex.stackexchange.com/questions/153193/latex-error-sweave-sty-not-found
+# if you have problems running that .tex file in LateX, then make sure to adjust the roots:
+#   http://tex.stackexchange.com/questions/153193/latex-error-sweave-sty-not-found
