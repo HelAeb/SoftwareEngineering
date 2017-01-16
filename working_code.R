@@ -166,9 +166,8 @@ corr_variables_name <- paste(corr_variables, ".cycle", sep = "")
 correlations <- sapply(data_detrended[, which(names(data_detrended) %in% corr_variables_name)],
                         corr.data, # apply function corr.data which calculates and gets the correlations
                         x = data_detrended[corr_core_name], # correlated against the corr_core_name variable
-                        lags = lag_corr)
-correlations <- correlations[, corr_variables_name] # order the columns correctly to be able to rename it
                         lags = lag_corr) # with number of lags defined in lag_corr
+correlations <- correlations[, corr_variables_name] # order the columns correctly to be able to rename it
 correlations_dataframe <- as.data.frame(correlations) # make data frame and rename it for plots
 names(correlations_dataframe) <- corr_variables
 
