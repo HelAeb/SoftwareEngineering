@@ -37,7 +37,7 @@ if (Sys.info()[['login']] == 'Helena Aebersold') {
 setwd(dir)
 
 
-Sweave("tex_file.tex")
+Sweave("GroupProject_SoftwareEngineering_Aebersold_Nickolic_Schoch.tex")
 
 
 # if you have problems running that .tex file in LateX, then make sure to adjust the roots:
