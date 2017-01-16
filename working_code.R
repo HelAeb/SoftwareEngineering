@@ -3,7 +3,7 @@
 # Course: HS16-7,610,1.00 Software Engineering for Economists
 # Authors: Helena Aebersold, Divna Nikolic, Michèle Schoch
 # Professor: Dr. Philipp Zahn
-# Date: 28.12.2016
+# Date: 16.01.2017
 # =============================================================================
 
 # =============================================================================
@@ -12,14 +12,15 @@
 # =============================================================================
 
 
+
 # -----------------------------------------------------------------------------
-# start PDF for plots
+# Start PDF for plots
 # -----------------------------------------------------------------------------
-# save all plots in one pdf
+
+# Save all plots in one pdf
 if (separate_pdf == F){
   pdf("Plots.pdf")
 }
-
 
 
 
@@ -39,15 +40,13 @@ invisible(GetPackages(packageList))
 
 
 
-
 # -----------------------------------------------------------------------------
-# 0. load data
+# 0. Load data
 # -----------------------------------------------------------------------------
 
-# load data set
+# Load data set
 data <- read.csv(data_file)
 names(data)[names(data) == date] <- "Date" # make sure the variable Date is called so
-
 
 
 
@@ -55,27 +54,27 @@ names(data)[names(data) == date] <- "Date" # make sure the variable Date is call
 # 1. clean data I: remove all NA, Date format for dates
 # -----------------------------------------------------------------------------
 
-# check if there are NA and remove them entirely from data set
+# Check if there are NA and remove them entirely from data set
 data <- na.omit(data)
 
-# make X as date format, use it as rownames
+# Make X as date format, use it as rownames
 data$Date <- as.Date(as.yearqtr(as.character(data$Date),
                               format = "%Y-Q%q"))
 rownames(data) <- data$Date
 
 
 
+# -----------------------------------------------------------------------------
+# 2. First look at data 
+# -----------------------------------------------------------------------------
 
-# -----------------------------------------------------------------------------
-# 2. first look at data 
-# -----------------------------------------------------------------------------
-# create long format for ggplot
+# Create long format for ggplot
 data_long <- melt(data, id.vars = "Date")
 
-# use the created function "white.theme.date.plot" to create ggplot with data on white background theme.
+# use the created function "white.theme.date.plot" in "functions.R" to create ggplot with data on white background theme
 #   x-axis = Date, y-axis = value, line type = variables used
 
-# plot for each variable in the data set
+# Plot for each variable in the data set
 all_variables_raw <- as.character(unique(data_long$variable))
 if (separate_pdf == T){ # if want to have separate PDF files, create "RawData.pdf" with these plots
   pdf("RawData.pdf")
@@ -84,7 +83,7 @@ if (separate_pdf == T){ # if want to have separate PDF files, create "RawData.pd
     print(plot)
   }
   dev.off()
-} else { # else print plots; they are added to the overall plot-PDF
+} else { # else print plots; they are added to the overall Plots-PDF
   for (i in 1:length(all_variables_raw)){
     plot <- white.theme.date.plot(subset(data_long, variable == all_variables_raw[i]), title = "raw data")
     print(plot)
@@ -93,17 +92,16 @@ if (separate_pdf == T){ # if want to have separate PDF files, create "RawData.pd
 
 
 
-
 # -----------------------------------------------------------------------------
-# 3. clean data II: stationarity
+# 3. Clean data II: stationarity
 # -----------------------------------------------------------------------------
 
-# list with log of data
-#   create a data frame combining the ones without log and those with
+# List with log of data
+#   create a data frame combining the ones without log and those with it
 data_log <- cbind(data[ , which(names(data) %in% no_log)],
                   log(data[ , -which(names(data) %in% no_log)])) # get log of all variables except for those defined as no_log
 
-# calculate growth data (after log) if there are some required
+# Calculate growth data (after log) if there are some required
 #   function depends on length of variables-vector (with one variable it needs different syntax)
 if (length(growth_variables) != 0 & length(growth_variables) > 1){
   data_growth <- as.data.frame(sapply(data[, which(names(data) %in% growth_variables)], growth))
@@ -114,27 +112,28 @@ if (length(growth_variables) != 0 & length(growth_variables) > 1){
   colnames(data_growth) <- growth_names
 }
 
-# combine data_log with the growth data and remove Date (don't take HP filter of dates)
+# Combine data_log with the growth data and remove Date (since don't take HP filter of dates)
 #   remark: due to growth calculations 1 data point lost
 data_log <- cbind(data_log[-1, ], data_growth)
 data_log <- data_log[, -which(names(data_log) == "Date")] 
 
-# use HP-filter to make data stationary, apply on each variable and save as list
+# Use HP-filter to make data stationary, apply on each variable and save as list
 hp_data <- lapply(data_log, hpfilter, freq = lambda)
 
-# combine cycle data of HP filter into data frame
+# Combine cycle data of HP filter into data frame
 data_detrended <- as.data.frame(sapply(hp_data, `[`, "cycle"))
 
-# add Date to data frame again for easier plots (also create it as long format for ggplot)
+# Add Date to data frame again for easier plots, also create it as long format for ggplot
 data_detrended <- cbind(Date = data$Date[-1], data_detrended)
 data_detrended_long <- melt(data_detrended, id.vars = "Date")
 
 
-#------------------
-# having a look at the detrended data
-#------------------
 
-# plot for each variable in the data set
+# -----------------------------------------------------------------------------
+# Having a look at the detrended data
+# -----------------------------------------------------------------------------
+
+# Plot for each variable in the data set
 all_variables_cycle <- as.character(unique(data_detrended_long$variable))
 if (separate_pdf == T){ # if want to have separate PDF files, create "CycleData.pdf" with these plots
   pdf("CycleData.pdf")
@@ -143,7 +142,7 @@ if (separate_pdf == T){ # if want to have separate PDF files, create "CycleData.
     print(plot)
   }
   dev.off()
-} else { # else print plots; they are added to the overall plot-PDF
+} else { # else print plots; they are added to the overall Plots-PDF
   for (i in 1:length(all_variables_cycle)){
     plot <- white.theme.date.plot(subset(data_detrended_long, variable == all_variables_cycle[i]), title = "cycle data")
     print(plot)
@@ -152,59 +151,56 @@ if (separate_pdf == T){ # if want to have separate PDF files, create "CycleData.
 
 
 
-
 # -----------------------------------------------------------------------------
-# 4. correlogramm: dynamic correlations
+# 4. Correlogramm: dynamic correlations
 # -----------------------------------------------------------------------------
 
-# lag and leads
+# Lag and leads
 lag_lead <- -lag_corr:lag_corr
 
-# rename to get correct data from detrended data frame
+# Rename to get correct data from detrended data frame
 corr_core_name <- paste(corr_core, ".cycle", sep = "")
-
 corr_variables_name <- paste(corr_variables, ".cycle", sep = "")
 
-# calculate the correlations
+# Calculate the correlations
 correlations <- sapply(data_detrended[, which(names(data_detrended) %in% corr_variables_name)],
                         corr.data, # apply function corr.data which calculates and gets the correlations
                         x = data_detrended[corr_core_name], # correlated against the corr_core_name variable
-                        lags = lag_corr)
+                        lags = lag_corr) # with number of lags defined in lag_corr
 correlations_dataframe <- as.data.frame(correlations) # make data frame and rename it for plots
 names(correlations_dataframe) <- corr_variables
 
-# combine in data frame with lags
+# Combine in data frame with lags
 correlation_data <- cbind(lag_lead,
                           correlations_dataframe)
 correlation_data_long <- melt(correlation_data, id.vars = "lag_lead")
 
-# plots
+# Dynamic correlogramm plots
 if (separate_pdf == T){ # if want to have separate PDF files, create "Correlogram.pdf" with these plots
   pdf("Correlogram.pdf")
   plot <- corr.plot(correlation_data_long)
   print(plot)
   dev.off()
-} else { # else print plots; they are added to the overall plot-PDF
+} else { # else print plots; they are added to the overall Plots-PDF
   plot <- corr.plot(correlation_data_long)
   print(plot)
 }
 
 
 
-
-
 # -----------------------------------------------------------------------------
 # 5. sVAR
 # -----------------------------------------------------------------------------
-# need detrended variable names to get data from detrended-matrix
+
+# Need detrended variable names to get data from detrended-matrix
 #   change names of variables to be same as in that matrix
 svar_variables_detrended <- paste(svar_variables, ".cycle", sep = "")
 
-# create separate data frame with svar data
+# Create separate data frame with svar data
 data_svar <- data_detrended[, which(names(data_detrended) %in% svar_variables_detrended)]
 data_svar <- data_svar[, svar_variables_detrended] # make correct order (!!!!!!!!!)
 
-# choose optimal lag
+# Choose optimal lag
 var_optimal_lag <- VARselect(data_svar, lag.max = max_lag_svar, type = "both")
 cat("optimal lags sVAR:", "\n") # print optimal lags in console even if file is sourced
 print(var_optimal_lag$selection)
@@ -227,7 +223,8 @@ if (summary_stat_var == T){
 }
 
 # Cholesky decomposition
-# create A-matrix with NA for those values which have to be estimated
+
+# Create A-matrix with NA for those values which have to be estimated
 a_matrix <- diag(length(svar_variables))
 to_estimate <- rep(NA, length(which(lower.tri(a_matrix)) == T))
 a_matrix[lower.tri(a_matrix)] <- to_estimate
@@ -243,20 +240,19 @@ irf_calculations <- irf(svar_estimate,
                         impulse = impulse_cycle,
                         n.ahead = n_ahead)
 
-# save IRF data in a data frame
+# Save IRF data in a data frame
 irf <- as.data.frame(irf_calculations$irf)
-
 irf_name <- c() # rename the columns
 for (i in 1:length(impulse)){
   irf_name <- c(irf_name, paste(response, "after", impulse[i], "shock", sep = " "))
 }
 colnames(irf) <- irf_name
 
-# add lags to data frame
+# Add lags to data frame
 irf_data <- cbind("lag" = c(0, seq(1:n_ahead)),
                   irf)
 
-# make long format for ggplot
+# Make long format for ggplot
 irf_data_long <- melt(irf_data, id.vars = "lag")
 
 # IRF plots
@@ -267,7 +263,7 @@ if (separate_pdf == T){ # if want to have separate PDF files, create "IRF.pdf" w
     print(plot)
   }
   dev.off()
-} else { # else print plots; they are added to the overall plot-PDF
+} else { # else print plots; they are added to the overall Plots-PDF
   for (i in 1:length(irf_name)){
     plot <- white.theme.irf.plot(subset(irf_data_long, variable == irf_name[i]))
     print(plot)
@@ -277,7 +273,8 @@ if (separate_pdf == T){ # if want to have separate PDF files, create "IRF.pdf" w
 
 
 # -----------------------------------------------------------------------------
-# end PDF for plots
+# End PDF for plots
 # -----------------------------------------------------------------------------
-# stop putting plots into the pdf file
+
+# Stop putting plots into the pdf-file
 dev.off()
