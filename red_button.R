@@ -1,15 +1,16 @@
 # =============================================================================
 # University of St.Gallen
 # Course: HS16-7,610,1.00 Software Engineering for Economists
-# Authors: Helena Aebersold, Divna Nikolic, Mich?le Schoch
+# Authors: Helena Aebersold, Divna Nikolic, Michèle Schoch
 # Professor: Dr. Philipp Zahn
-# Date: 28.12.2016
+# Date: 16.01.2017
 # =============================================================================
 
 # =============================================================================
-# - This File contains the "red button" and possible changes with new data,
+# - This file contains the "red button" and possible changes with new data,
 #     it sources the working code
 # =============================================================================
+
 
 
 # -----------------------------------------------------------------------------
@@ -20,17 +21,16 @@
 rm(list=ls())
 
 # Set working directory
-## Erkl?rung:
+## Erklärung:
 ## Sys.info()[['login']] unten in die Konsole eingeben und den Output dieses Befehls
-## in das unten vorbereitete Feld (zb: 'Feld_Divna') eingeben. (Vergesst die ' ' nicht, vgl. 'Helena Aebersold')
-## Danach gebt ihr eure Ordnerstruktur / working directory in das vorbereitete Feld ein.
-## Wenn das gemacht ist, k?nnen wir allen in diesem File arbeiten, ohne dass wir jedes mal 
-## die Ordnerstruktur anpassen m?ssen.
+## in das unten vorbereitete Feld (zb: 'Feld_PhilippZahn') eingeben (vergesst die ' ' nicht, vgl. 'Helena Aebersold')
+## danach gebt ihr eure Ordnerstruktur / working directory in das vorbereitete Feld ein
+## wenn das gemacht ist, können wir alle in diesem file arbeiten, ohne dass wir jedes mal die Ordnerstruktur anpassen müssen
 if (Sys.info()[['login']] == 'Helena Aebersold') {
   dir <- 'C:/Users/Helena Aebersold/Dropbox/HSG/Master/HS16/software_engineering_for_economists/SoftwareEngineering/'
 } else if (Sys.info()[['login']] == 'Divna') {
   dir <- "C:/Users/Divna/Documents/Uni/Master/3. Semester/Kontextstudium/Software Engineering for Economists/Group Project/SoftwareEngineering/"
-} else if (Sys.info()[['login']] == 'MichÃ¨le') {
+} else if (Sys.info()[['login']] == 'Michèle') {
   dir <- "C:/Users/MichÃ¨le/Documents/MAHS15/Software_Engineering_for_Economists/SoftwareEngineering"
 } else if (Sys.info()[['login']] == 'Feld_PhilippZahn') {
   dir <- ""
@@ -40,32 +40,37 @@ if (Sys.info()[['login']] == 'Helena Aebersold') {
 setwd(dir)
 
 
+
 # -----------------------------------------------------------------------------
-# 1. prerequisites for working code
+# 1. Prerequisites for working code
 #    - possible changes with new data set
 # -----------------------------------------------------------------------------
 
 #--------------------
-# saving plots in PDF
+# Saving plots in PDF
 #--------------------
 
-# separate PDF files for graphs of raw data, detrended data, correlogram, IRF
+# Separate PDF files for graphs of raw data, detrended data, correlogram, IRF
 #   T: separate PDF files
 #   F: all plots saved in one PDF file
 separate_pdf <- F
 
 
+
 #--------------------
-# data set
+# Data set
 #--------------------
 
-# name of data set
+# Name of data set
 data_file <- "./DataSwiss.csv"
-date <- "X" # variable indicating the dates --> to make sure it is called "Date" in analysis
+date <- "X" # variable indicating the dates -> to make sure it is called "Date" in analysis
 
-#---
-# data variables:
-#---
+
+
+#--------------------
+# Data variables:
+#--------------------
+
 #   X = Dates (in quarters)
 #   CPI = consumer price index
 #   i10Y = long-run interest rates (10 years)
@@ -82,16 +87,17 @@ date <- "X" # variable indicating the dates --> to make sure it is called "Date"
 
 
 #--------------------
-# log of data and growth
+# Log of data and growth
 #--------------------
 
-# variables in data which do NOT need to be logarithmized
+# Variables in data which do NOT need to be logarithmized
 no_log <- c("Date", "i10Y", "i3M", "RER")
 
-# variables which have to be taken as growth (e.g. CPI growth == inflation)
+# Variables which have to be taken as growth (e.g. CPI growth == inflation)
 growth_variables <- c("CPI")
-# how to name the variables after taken growth (e.g. CPI growth == inflation)
-#   make sure to have the same length and order of the variables as in growth_variables
+
+# How to name the variables after taken growth (e.g. CPI growth == inflation)
+#   make sure to have the same length and order of the variables as in growth_variables!
 growth_names <- c("INF")
 
 
@@ -100,7 +106,7 @@ growth_names <- c("INF")
 # HP filter
 #--------------------
 
-# define lambda for HP-filter
+# Define lambda for HP-filter
 lambda <- 1600 # usually lambda = 1600 for quarterly data
 
 
@@ -109,13 +115,13 @@ lambda <- 1600 # usually lambda = 1600 for quarterly data
 # Correlations variables
 #--------------------
 
-# number of lags/leads for correlogram
+# Number of lags/leads for correlogram
 lag_corr <- 8
 
-# variable against which correlations will be computed (one variable only)
+# Variable against which correlations will be computed (one variable only)
 corr_core <- c("GDP")
 
-# variables correlated against corr_core
+# Variables correlated against corr_core
 corr_variables <- c("MB", "M1", "M2", "M3")
 
 
@@ -124,28 +130,28 @@ corr_variables <- c("MB", "M1", "M2", "M3")
 # sVAR variables
 #--------------------
 
-# variables entering the sVAR model
+# Variables entering the sVAR model
 #   IMPORTANT: make sure to have the ordering of the variables correct!!!
 svar_variables <- c("COM", "GDP", "INF", "M1", "i3M")
 
-# choose maximal lag for optimal lag in sVAR
+# Choose maximal lag for optimal lag in sVAR
 max_lag_svar <- 8
 ## remark: optimal lags result will be printed in console,
 ##    which to chose can still be defined by chosing other information criteria
 
-# which information criteria to choose for estimations in sVAR
-#   AIC, HQ, SC (= BIC), FPE
+# Which information criteria to choose for estimations in sVAR
+#   AIC, HQ, SC (= BIC) or FPE
 # or put a number for lag
 criteria <- "SC"
 
-# summary statistics of VAR estimates
+# Summary statistics of VAR estimates
 #   T: print summary statistics of VAR estimates in console
 #   F: don't print summary statistics of VAR estimates in console
 summary_stat_var <- F
 
 
-# response and impulse for IRF, time ahead
-#   Variables have to be in the model!
+# Response and impulse for IRF, time ahead
+#   variables have to be in the model!
 response <- c("GDP", "INF")
 impulse <- c("M1", "i3M")
 n_ahead <- 20
@@ -153,8 +159,8 @@ n_ahead <- 20
 
 
 # -----------------------------------------------------------------------------
-# 2. run working code
+# 2. Run working code
 # -----------------------------------------------------------------------------
 
-# source the working code
+# Source the working code
 source("./working_code.R")
