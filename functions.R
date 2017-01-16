@@ -3,13 +3,14 @@
 # Course: HS16-7,610,1.00 Software Engineering for Economists
 # Authors: Helena Aebersold, Divna Nikolic, Michèle Schoch
 # Professor: Dr. Philipp Zahn
-# Date: 28.12.2016
+# Date: 16.01.2017
 # =============================================================================
 
 # =============================================================================
 # FUNCTIONS FILE
-# - This File contains all functions and is sourced by the script file (working code)
+# - This file contains all functions and is sourced by the script file (working code)
 # =============================================================================
+
 
 
 # -----------------------------------------------------------------------------
@@ -18,12 +19,12 @@
 
 # Function to check for packages and load missing ones
 GetPackages <- function(requiredPackages) {
-  # Checks if the given packages are installed and loads the missing ones
+  # checks if the given packages are installed and loads the missing ones
   #
   # Args: 
-  #   requiredPackages = A vector of packages that should be loaded
+  #   requiredPackages = a vector of packages that should be loaded
   # Returns:
-  #   Loads packages
+  #   loads packages
   newPackages <- requiredPackages[!(requiredPackages %in% 
                                       installed.packages()[ ,"Package"])]
   if (length(newPackages) > 0) {
@@ -36,18 +37,18 @@ GetPackages <- function(requiredPackages) {
 
 
 # -----------------------------------------------------------------------------
-# 2. first look at data 
+# 2. First look at data 
 # -----------------------------------------------------------------------------
 
-# Function returning a ggplot on white background, where on the x-axis are the Dates
-#   and on the y-axis are the values. Line types are according to the variables
+# Function returning a ggplot on white background, where the Dates are on the x-axis
+#   and the values are on the y-axis, line types are according to the variables
 white.theme.date.plot <- function(data, title){
   # returns a ggplot with white background theme
   #
   # Args: 
   #   data = data set in long format, containing the columns "Date", "value" and "variable"
   # Returns:
-  #   ggplot on white background, Date on x-axis and values of the variable on y-axis. 
+  #   ggplot on white background, Date on x-axis and values of the variable on y-axis 
   #   the line type is according to the variables
   plot <- ggplot(data = data,
                  aes(x = Date, y = value, linetype = variable)) +
@@ -68,8 +69,6 @@ white.theme.date.plot <- function(data, title){
 
 
 
-
-
 # -----------------------------------------------------------------------------
 # 3. clean data II: stationarity
 # -----------------------------------------------------------------------------
@@ -79,7 +78,7 @@ growth <- function(data){
   # calculates growth rate
   #
   # Args:
-  #   data: data of which one wants to calculate the growth
+  #   data = data of which one wants to calculate the growth
   # Returns:
   #   growth rate of data
   first_diff <- diff(data)  / # take first difference
@@ -89,9 +88,8 @@ growth <- function(data){
 
 
 
-
 # -----------------------------------------------------------------------------
-# 4. correlogramm: dynamic correlations
+# 4. Correlogramm: dynamic correlations
 # -----------------------------------------------------------------------------
 
 # Function returning correlation calculations
@@ -99,9 +97,8 @@ corr.data <- function(x, y, lags) {
   # returns the correlations (acf data of the ccf function)
   #
   # Args:
-  #   x, y: time series data
-  #   lags: number of lags and leads
-  # 
+  #   x, y = time series data
+  #   lags = number of lags and leads
   # Returns:
   #   the correlation data (acf) of the ccf function
   ccf.data <- ccf(x, y, lag.max = lags, type = "correlation", plot = F)
@@ -109,14 +106,12 @@ corr.data <- function(x, y, lags) {
   return(correlation)
 }
 
-
 # Function plotting dynamic correlogram
 corr.plot <- function(data) {
   # returns dynamic correlation plot with white theme
   #
   # Args: 
   #   data = data set containing lag_lead and correlations
-  #
   # Returns:
   #   dynamic correlation with lag/lead on x-axis and cross correlations on y-axis
   plot <- ggplot(data = data,
@@ -138,23 +133,19 @@ corr.plot <- function(data) {
 
 
 
-
-
-
-
 # -----------------------------------------------------------------------------
 # 5. sVAR
 # -----------------------------------------------------------------------------
 
-# Function returning a ggplot of the IRF on white background, where on the x-axis are the lags
-#   and on the y-axis are the values. Line types are according to the variables
+# Function returning a ggplot of the IRF on white background, where the lags are on the x-axis 
+#   and the values are on the y-axis, line types are according to the variables
 white.theme.irf.plot <- function(data){
   # returns a ggplot with white background theme of the IRF
   #
   # Args: 
   #   data = data set in long format, containing the columns "Date", "value" and "variable"
   # Returns:
-  #   ggplot on white background, lags on x-axis and values of the variable on y-axis. 
+  #   ggplot on white background, lags on x-axis and values of the variable on y-axis
   #   the line type is according to the variables
   plot <- ggplot(data = data,
                  aes(x = lag, y = value)) +

@@ -3,22 +3,23 @@
 # Course: HS16-7,610,1.00 Software Engineering for Economists
 # Authors: Helena Aebersold, Divna Nikolic, Michèle Schoch
 # Professor: Dr. Philipp Zahn
-# Date: 28.12.2016
+# Date: 16.01.2017
 # =============================================================================
 
 # =============================================================================
 # Sweave File
-# - This File contains the code to compile the LateX .Rnw into a .tex which 
+# - This file contains the code to compile the LateX .Rnw into a .tex which 
 #     we then can run normally to make a .pdf with all the outputs from R
 # =============================================================================
 
 
-# IMPORTANT NOTE:
-#   I work with Texmaker which saves the files as LateX files. When using other
-#   LateX editors make sure to save the one with code junks in .Rnw. Make changes
-#   only in that file, not in the normal .tex
 
-# The Sweave command is used in package "utils". Set your working directory right
+# IMPORTANT NOTE:
+#   We work with Texmaker which saves the files as LateX files 
+#   when using other LateX editors make sure to save the one with code junks in .Rnw 
+#   make changes only in that file, not in the normal .tex
+
+# The Sweave command is used in package "utils", set your working directory right
 #   and run this code, which will return a .tex file
 
 
@@ -40,5 +41,5 @@ setwd(dir)
 Sweave("GroupProject_SoftwareEngineering_Aebersold_Nickolic_Schoch.tex")
 
 
-# if you have problems running that .tex file in LateX, then make sure to adjust the roots:
+# If you have problems running that .tex file in LateX, then make sure to adjust the roots, see:
 #   http://tex.stackexchange.com/questions/153193/latex-error-sweave-sty-not-found
