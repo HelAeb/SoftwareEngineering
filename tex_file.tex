@@ -26,7 +26,7 @@
 \begin{document}
 
 \title{\textbf{Software Engineering} \\ \vspace{40pt} Group Project}
-\author{Helena Aebersold (10-605-921), \\ Divna Nikolic (12-614-715), \\ Michèle Schoch (xx-xxx-xxx)}
+\author{Helena Aebersold (10-605-921), \\ Divna Nikolic (12-614-715), \\ Michèle Schoch (10-607-448)}
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -47,12 +47,45 @@ source("./red_button.R")
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Introduction		
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section*{Introduction}
+Economic models in theory suggests specific changes depending another variable changes. For instance, if GDP rises, productivity rises and therefore interest rate is rising as more people demand for money. The purpose of this report is to find and analyze empirical evidence for the model implications for the country Switzerland. The data consists of eleven variables on quarterly basis of Switzerland. The variables are listed in the tabel below. The report on the one hand analyzes cross correlations between GDP and the different money aggregats (MB M1, M2, M3). On the other hand, the effects of monetary policy shocks to GDP and inflation will be analyzed. 
+\newline
+\begin{table}[H]
+\centering
+\caption{Data variables}
+\label{tab: var}
+\begin{tabular}{l|l}
+	\textbf{Abbreviation} & \textbf{variable name}\\\hline\hline
+	X & Dates\\
+	CPI & Consumer Price Index \\
+	i10Y & long-run interest rates (10 years) \\
+	GDP & gross domestic product\\
+	GDP\_DEF & GDP deflator \\
+	COM & commoditiy price \\
+	i3M & short-run interest rates (3 month libor) \\
+	M1 & money aggregate 1 \\
+	M2 & money aggregate 2 \\
+	M3 & money aggregate 3 \\
+	MB & money base \\
+	RER & real exchange rate \\
+\hline
+\end{tabular}
+\end{table}
+ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Dynamic Correlation
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\section*{Dynamic correlation}
+\section{Dynamic Correlation}
 
+In this section the cross correlations between GDP and the four money aggregates MB, M1, M2 and M3 are analyzed using the vector autoregression model. The analysis considers eight lags (past) and 8 leads (future). According to our expectation from theoretic economic models GDP and money base should have a positive correlation based on the assumption that a higher GDP rises demand for money.
 
 \begin{figure}[H]
 \caption{Dynamic correlation of xxxxxxxx}
@@ -62,11 +95,28 @@ source("./red_button.R")
 plot <- corr.plot(correlation_data_long)
 print(plot)
 @
-\end{figure}
+\end{figure} \ \\\textbf{Interpretation}
+\newline
+Monetary base (MB) is positively correlated with GDP for different lags suggesting that a high monetary base is rising output. At the same time the money aggregates M1, M2 and M3 have a lower correlation with GDP which is in line with our expectation that the MB has the biggest impact on the output.
+\newline
+The correlation of GDP and MB is lower than the correlation of GDP and the three money aggregates for the leads. The correlation of M1, M2 and M3 with GDP is even higher than the one with MB. An explanation could be: A higher ouptut now will lead to more production and investment in the future and thus to a higher demand for money. After some lags the effect appears also in M1, M2 and M3.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% sVAR model
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{SVAR Model}
 
-\section*{sVAR model}
+In five-variable SVAR model the optimal lag of two (meaning half a year) was chosen.  The model includes the following variables:  output $\gamma_t$, inflation $\pi_t$, money aggreagte $m_t$, interest rate $r_t$ and commodity prices $c_t$. 
+\newline
+The economic assumptions for these cases are as follows; Output will not react immediately to a monetary shock due to stickiness. Firms might only be able to adjust their production after some time has passed which leads to a lagged response of output. Furthermore, a change in GDP will affect the other economic variables as well for instance unemployment or prices. Therefore, output should be at the first place of the SVAR's odering of the SVAR model. Variations in inflation might follow the output adjustments and eventually have an upward pressure on the price level due to costly production alterations. In consequence, this variable has to be placed after output but before any monetary policy instrument.
+\newline
+Commodity prices, however, are considered to be independent of movements in output or inflation. The  production  process,  which  normally  depends  on  commodity  is  thus  hugely  affected by alterations in the commodity price index. That is why commodity prices are set as first variable in part.
+\newline
+The monetary aggregate M1 is rather endogenous and shocks to this variable have vast impact on interest rates. Hence, the money aggreagte is placed before interest rate. Lastly, interest rates are considered to be entirely endogenous and responding to all changes of the aforementioned variables. Central Banks react to economic movements so interest rates is set at the end.
 
 \begin{figure}[H]
 \caption{impuls response functions (IRF)}
@@ -82,7 +132,9 @@ do.call(grid.arrange, plot)
 \end{figure}
 
 
-
+\newline\textbf{Interpretation}
+\newline
+The reaction of output and inflation is positive for some quarters in both cases of a monetary policy shock.  An unexpected one-standard-deviation increase in money leads toa one quarter decrease in output (upper left in Figure 2) but then a fairly strong increase,which lasts for approximately three years (12 quarters) before the effect converges to zero. One possible explanation for the not very intuitive decrease of output might of behavioural and expectational background.  An unexpected increase in money could be interpreted as a reaction to a faltering economy, leading to short-term uncertainty which is quickly overcome by the effect of a large money amount in the economy.  More money leads to cheaper investments, encouraging firms to obtain credits which in turn boosts outcome.  A similar argumentation can be made for the impulse response function of inflation to a shock in the money gap (lowerleft in Figure 2).  Movements of prices come along with changes in money aggregates,  so a higher amount of money in the market ceteris paribus will lead to higher inflation.  However, the effect is lasting two years, which is less than for output. The figures on the right in Figure 2 suggest that output and inflation rise in response to an unexpected increase in the interest rate.  Again, the temporary influence of this shock persists longer in the case of output (2.5 years) than in inflation (1.5 years).  According to economict heory  a  restrictive  monetary  policy  should  not  lead  to  inflation  or  output  pressure.   This again  can  be  explained  by  the  afore  mentioned  assumption  of  monetary  policy  authorities having more information and the empirically discussed price puzzle. The magnitude however is for both variables rather small compared to a money shock.  In either case, longer term effects are not taken into account as there are only two lags included in the SVAR model. In consequence commodity prices do not have a remarkable influence on variations in output and inflation in Switzerland.  Commodity prices play an important role in emerging economies but bear a rather small importance in Switzerland compared to services and trade.
 
 \end{document}
 
