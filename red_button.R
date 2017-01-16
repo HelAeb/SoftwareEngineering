@@ -1,7 +1,7 @@
 # =============================================================================
 # University of St.Gallen
 # Course: HS16-7,610,1.00 Software Engineering for Economists
-# Authors: Helena Aebersold, Divna Nikolic, Mich?le Schoch
+# Authors: Helena Aebersold, Divna Nikolic, Michèle Schoch
 # Professor: Dr. Philipp Zahn
 # Date: 28.12.2016
 # =============================================================================
